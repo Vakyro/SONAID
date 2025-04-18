@@ -9,7 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: false, // Enable image optimization
   },
-  swcMinify: true, // Enable SWC minification
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production', // Remove console in production
   },
