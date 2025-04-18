@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -35,6 +36,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 =======
+=======
+>>>>>>> 1566e7fe46c94dcacab023598aebc510b480bfe4
 **SONAID** is an AI-powered diagnostic platform designed to assist healthcare professionals in detecting embryological malformations through advanced analysis of ultrasound imaging. Leveraging **Geometric Semantic Genetic Programming (GSGP-CUDA)** and modern full-stack technologies, SONAID provides fast, accurate, and interpretable predictions while adhering to medical compliance standards (HIPAA/GDPR).  
 
 ✨ **Features**:  
@@ -80,8 +83,3 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ---
 
 *Empowering clinicians with AI-driven insights—because every life deserves a healthy start.* 🌟
->>>>>>> 60981f8ab54c87e8a5127d699e520ade57743624
-=======
-# SONAID
-AI-powered diagnostic platform
->>>>>>> dec9eb9effe98b41f07b4934edb8020beadf407a
