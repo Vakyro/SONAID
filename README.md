@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -82,3 +83,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 *Empowering clinicians with AI-driven insights—because every life deserves a healthy start.* 🌟
 >>>>>>> 60981f8ab54c87e8a5127d699e520ade57743624
+=======
+# SONAID
+AI-powered diagnostic platform
+>>>>>>> dec9eb9effe98b41f07b4934edb8020beadf407a
