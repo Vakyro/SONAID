@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Link } from 'next-view-transitions'
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { SonaidLogo } from "@/components/sonaid-logo"
@@ -12,7 +12,7 @@ import { SharedCasesList } from "@/components/shared-cases-list"
 
 export default function SharedCasesPage() {
   const { currentUser, isLoading } = useUser()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   // Redirect to login if not authenticated
   useEffect(() => {

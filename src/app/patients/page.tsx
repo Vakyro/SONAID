@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Link } from 'next-view-transitions'
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PlusCircle } from "lucide-react"
@@ -13,7 +13,7 @@ import { useEffect } from "react"
 
 export default function PatientsPage() {
   const { currentUser, isLoading } = useUser()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   // Redirect to login if not authenticated
   useEffect(() => {

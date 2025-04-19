@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from 'next-view-transitions'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { SonaidLogo } from "@/components/sonaid-logo"
 import { ForgotPasswordForm } from "@/components/forgot-password-form"

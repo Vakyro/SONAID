@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { UserProvider } from "../context/user-context";
 import { measurePageLoad } from "@/lib/performance";
+import { ViewTransitions } from 'next-view-transitions'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,20 +23,58 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light">
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          forcedTheme="light"
-        >
-          <UserProvider>
-            {children}
-            <Toaster />
-          </UserProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en" className="light">
+        <head>
+          {/* Prefetch script for all internal links */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                document.addEventListener('DOMContentLoaded', function () {
+                  const prefetch = (href) => {
+                    if (window.next && window.next.router && typeof window.next.router.prefetch === 'function') {
+                      window.next.router.prefetch(href);
+                    }
+                  };
+                  const isInternal = (href) => href && href.startsWith('/') && !href.startsWith('//');
+                  const links = document.querySelectorAll('a[href]');
+                  links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (isInternal(href)) {
+                      link.addEventListener('mouseenter', () => prefetch(href));
+                      // Optionally, prefetch when link is visible:
+                      if ('IntersectionObserver' in window) {
+                        const observer = new IntersectionObserver((entries) => {
+                          entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                              prefetch(href);
+                              observer.disconnect();
+                            }
+                          });
+                        });
+                        observer.observe(link);
+                      }
+                    }
+                  });
+                });
+              `,
+            }}
+          />
+        </head>
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            forcedTheme="light"
+          >
+            <UserProvider>
+              {children}
+              <Toaster />
+            </UserProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

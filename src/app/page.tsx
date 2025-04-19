@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Link } from 'next-view-transitions'
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { PlusCircle } from "lucide-react"
@@ -19,7 +19,7 @@ const PatientList = dynamic(() => import("@/components/patient-list").then(mod =
 
 export default function Dashboard() {
   const { currentUser, isLoading } = useUser()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   // Redirect to login if not authenticated
   useEffect(() => {
