@@ -1,5 +1,7 @@
 **SONAID** is an AI-powered diagnostic platform designed to assist healthcare professionals in detecting embryological malformations through advanced analysis of ultrasound imaging. Leveraging **Geometric Semantic Genetic Programming (GSGP-CUDA)** and modern full-stack technologies, SONAID provides fast, accurate, and interpretable predictions while adhering to medical compliance standards (HIPAA/GDPR).  
 
+🌐 **Live Demo**: [https://sonaid.vercel.app](https://sonaid.vercel.app)  
+
 ✨ **Features**:  
 - **DICOM Imaging Support**: Seamless integration with medical ultrasound formats.  
 - **Dual Interface**:  
