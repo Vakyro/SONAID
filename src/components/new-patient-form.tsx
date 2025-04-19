@@ -80,7 +80,7 @@ export function NewPatientForm() {
                 <SelectTrigger id="department">
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white">
                   <SelectItem value="cardiology">Cardiology</SelectItem>
                   <SelectItem value="neurology">Neurology</SelectItem>
                   <SelectItem value="orthopedics">Orthopedics</SelectItem>

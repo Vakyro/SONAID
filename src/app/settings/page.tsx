@@ -101,7 +101,7 @@ export default function SettingsPage() {
                     <SelectTrigger id="language" className="w-full sm:w-[240px]">
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white">
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="es">Español</SelectItem>
                       <SelectItem value="fr">Français</SelectItem>
@@ -145,7 +145,7 @@ export default function SettingsPage() {
                     <SelectTrigger id="default-sort" className="w-full sm:w-[240px]">
                       <SelectValue placeholder="Select sort order" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white">
                       <SelectItem value="date-desc">Newest First</SelectItem>
                       <SelectItem value="date-asc">Oldest First</SelectItem>
                       <SelectItem value="name-asc">Name (A-Z)</SelectItem>
