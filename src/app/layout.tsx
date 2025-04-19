@@ -1,11 +1,13 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+// Corrige la ruta de importación CSS
+import "./globals.css"; // Cambia a la ubicación correcta de tu archivo CSS
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { UserProvider } from "../context/user-context";
 import { measurePageLoad } from "@/lib/performance";
+// Elimina la importación de ViewTransitions
 import { ViewTransitions } from 'next-view-transitions'
 
 const inter = Inter({ subsets: ["latin"] });

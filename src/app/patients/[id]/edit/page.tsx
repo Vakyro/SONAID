@@ -4,7 +4,14 @@ import { ArrowLeft } from "lucide-react"
 import { EditPatientForm } from "@/components/edit-patient-form"
 import { SonaidLogo } from "@/components/sonaid-logo"
 
-export default function EditPatientPage({ params }: { params: { id: string } }) {
+export default function EditPatientPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  const { id } = params;
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
