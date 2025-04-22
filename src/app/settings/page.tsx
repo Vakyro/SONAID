@@ -1,13 +1,13 @@
 "use client"
 
 import { Link } from 'next-view-transitions'
-import { useRouter } from "next/navigation"
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Moon, Sun, BellRing, Lock, Eye } from "lucide-react"
 import { SonaidLogo } from "@/components/sonaid-logo"
 import { UserProfileDropdown } from "@/components/user-profile-dropdown"
-import { useUser } from "../../context/user-context"
+import { useUser } from "@/context/user-context"
 import { useEffect, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function SettingsPage() {
   const { currentUser, isLoading } = useUser()
-  const router = useRouter()
+  const router = useTransitionRouter()
   const [theme, setTheme] = useState("light")
   const [language, setLanguage] = useState("en")
   const [notifications, setNotifications] = useState(true)
@@ -49,7 +49,6 @@ export default function SettingsPage() {
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex items-center gap-2">
           <Link href="/">
-            {/*@ts-ignore*/}
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -101,7 +100,7 @@ export default function SettingsPage() {
                     <SelectTrigger id="language" className="w-full sm:w-[240px]">
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white">
+                    <SelectContent className='bg-white'>
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="es">Español</SelectItem>
                       <SelectItem value="fr">Français</SelectItem>
@@ -145,7 +144,7 @@ export default function SettingsPage() {
                     <SelectTrigger id="default-sort" className="w-full sm:w-[240px]">
                       <SelectValue placeholder="Select sort order" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white">
+                    <SelectContent>
                       <SelectItem value="date-desc">Newest First</SelectItem>
                       <SelectItem value="date-asc">Oldest First</SelectItem>
                       <SelectItem value="name-asc">Name (A-Z)</SelectItem>
@@ -264,7 +263,6 @@ export default function SettingsPage() {
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col items-start gap-2">
-                {/*@ts-ignore*/}
                 <Button variant="outline">Change Password</Button>
                 <p className="text-xs text-muted-foreground">Last password change: 45 days ago</p>
               </CardFooter>
@@ -290,7 +288,6 @@ export default function SettingsPage() {
                       <p className="font-medium">Mobile App</p>
                       <p className="text-sm text-muted-foreground">iPhone 13 • Last active: 2 days ago</p>
                     </div>
-                    {/*@ts-ignore*/}
                     <Button variant="outline" size="sm">
                       Revoke
                     </Button>
@@ -298,7 +295,6 @@ export default function SettingsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                {/*@ts-ignore*/}
                 <Button variant="destructive">Log Out All Devices</Button>
               </CardFooter>
             </Card>

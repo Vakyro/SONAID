@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -29,7 +29,7 @@ const mockPatient = {
 }
 
 export function EditPatientForm({ patientId }: { patientId: string }) {
-  const router = useRouter()
+  const router = useTransitionRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // In a real app, you would fetch the patient data based on the ID
@@ -98,7 +98,7 @@ export function EditPatientForm({ patientId }: { patientId: string }) {
                 <SelectTrigger id="department">
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
-                <SelectContent className="bg-white">
+                <SelectContent>
                   <SelectItem value="cardiology">Cardiology</SelectItem>
                   <SelectItem value="neurology">Neurology</SelectItem>
                   <SelectItem value="orthopedics">Orthopedics</SelectItem>

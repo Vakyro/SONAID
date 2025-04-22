@@ -4,18 +4,12 @@ import { Link } from 'next-view-transitions'
 import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { PlusCircle } from "lucide-react"
-import dynamic from "next/dynamic"
+import { PlusCircle, Share2 } from "lucide-react"
+import { PatientList } from "@/components/patient-list"
 import { SonaidLogo } from "@/components/sonaid-logo"
 import { UserProfileDropdown } from "@/components/user-profile-dropdown"
-import { useUser } from "../context/user-context"
+import { useUser } from "@/context/user-context"
 import { useEffect } from "react"
-
-// Dynamically import PatientList with loading fallback
-const PatientList = dynamic(() => import("@/components/patient-list").then(mod => ({ default: mod.PatientList })), {
-  loading: () => <div className="animate-pulse h-64 bg-muted rounded-md"></div>,
-  ssr: false
-})
 
 export default function Dashboard() {
   const { currentUser, isLoading } = useUser()
@@ -47,14 +41,13 @@ export default function Dashboard() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">SONAID Patient Cases</h1>
           <Link href="/patients/new">
-            {/* @ts-ignore*/}
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-4 w-4" />
               <span>New Case</span>
             </Button>
           </Link>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle>Total SONAID Cases</CardTitle>
@@ -97,6 +90,24 @@ export default function Dashboard() {
             <CardFooter>
               <Link href="/patients?filter=recent-uploads" className="text-sm text-primary">
                 View recent uploads
+              </Link>
+            </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle>Shared Cases</CardTitle>
+              <CardDescription>Cases shared with you</CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center gap-2">
+              <div className="text-3xl font-bold">5</div>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Share2 className="h-3 w-3" />
+                <span>+2 new</span>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Link href="/shared-cases" className="text-sm text-primary">
+                View shared cases
               </Link>
             </CardFooter>
           </Card>

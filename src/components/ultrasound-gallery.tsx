@@ -15,34 +15,40 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Download, Expand, Trash2 } from "lucide-react"
 import { UltrasoundUploader } from "@/components/ultrasound-uploader"
+import { ImageValidator } from "@/components/image-validator"
 
-// Mock ultrasound images
-const ultrasoundImages = [
+// Mock breast ultrasound/mammogram images
+const breastImages = [
   {
     id: "1",
-    title: "Cardiac Ultrasound 1",
+    title: "Right Breast Ultrasound",
     date: "April 14, 2025",
-    description: "Four-chamber view",
+    description: "Transverse view of right breast mass",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
   {
     id: "2",
-    title: "Cardiac Ultrasound 2",
+    title: "Left Breast Ultrasound",
     date: "April 14, 2025",
-    description: "Parasternal long-axis view",
+    description: "Longitudinal view of left breast",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
   {
     id: "3",
-    title: "Cardiac Ultrasound 3",
+    title: "Mammogram - Right CC View",
     date: "April 10, 2025",
-    description: "Parasternal short-axis view",
+    description: "Craniocaudal view of right breast",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
 ]
 
 export function UltrasoundGallery() {
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImage, setSelectedImage] = useState<any>(null)
+  const [validatedImage, setValidatedImage] = useState<File | null>(null)
+
+  const handleValidImage = (file: File) => {
+    setValidatedImage(file)
+  }
 
   return (
     <div className="grid gap-4">
@@ -52,8 +58,8 @@ export function UltrasoundGallery() {
           <TabsTrigger value="upload">Upload New</TabsTrigger>
         </TabsList>
         <TabsContent value="gallery" className="mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {ultrasoundImages.map((image) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {breastImages.map((image) => (
               <Card key={image.id} className="overflow-hidden">
                 <CardContent className="p-0">
                   <div className="relative aspect-video">
@@ -69,7 +75,7 @@ export function UltrasoundGallery() {
                           <Expand className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-4xl">
+                      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>{image.title}</DialogTitle>
                           <DialogDescription>
@@ -84,12 +90,12 @@ export function UltrasoundGallery() {
                             className="object-contain"
                           />
                         </div>
-                        <div className="flex justify-end gap-2">
-                          <Button variant="outline" size="sm">
+                        <div className="flex flex-col sm:flex-row justify-end gap-2">
+                          <Button variant="outline" size="sm" className="w-full sm:w-auto">
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </Button>
-                          <Button variant="destructive" size="sm">
+                          <Button variant="destructive" size="sm" className="w-full sm:w-auto mt-2 sm:mt-0">
                             <Trash2 className="h-4 w-4 mr-2" />
                             Delete
                           </Button>
@@ -107,7 +113,12 @@ export function UltrasoundGallery() {
           </div>
         </TabsContent>
         <TabsContent value="upload" className="mt-4">
-          <UltrasoundUploader />
+          <ImageValidator onValidImage={handleValidImage} />
+          {validatedImage && (
+            <div className="mt-4">
+              <UltrasoundUploader />
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

@@ -1,20 +1,22 @@
 "use client"
 
+import React from "react" // <-- Add this line
 import { Link } from 'next-view-transitions'
-import { useRouter } from "next/navigation"
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, Calendar, Edit, FileText, ImageIcon, Trash2 } from "lucide-react"
 import { PatientInfo } from "@/components/patient-info"
 import { UltrasoundGallery } from "@/components/ultrasound-gallery"
-import { PredictionResults } from "@/components/prediction-results"
+import { BreastTumorClassification } from "@/components/breast-tumor-classification"
 import { SonaidLogo } from "@/components/sonaid-logo"
 import { UserProfileDropdown } from "@/components/user-profile-dropdown"
-import { useUser } from "../../../context/user-context"
+import { useUser } from "@/context/user-context"
 import { useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { PredictionHistoryQuotes } from "@/components/prediction-history-quotes"
 
 // Mock data for shared doctors
 const patientSharing = {
@@ -27,9 +29,49 @@ const patientSharing = {
   "7": ["2"], // Patient 7 is shared with doctor 2
 }
 
+// Mock prediction results for breast tumor classification (removed 'normal' classification)
+const mockPredictions = [
+  {
+    id: "1",
+    date: "April 14, 2025",
+    model: "BreastNet v3.2",
+    imageId: "1",
+    doctor: "Sarah Johnson",
+    classification: {
+      benign: 0.3,
+      malignant: 0.7,
+    },
+    imageUrl: "/placeholder.svg?height=400&width=600",
+  },
+  {
+    id: "2",
+    date: "April 10, 2025",
+    model: "BreastNet v3.1",
+    imageId: "3",
+    doctor: "Michael Chen",
+    classification: {
+      benign: 0.75,
+      malignant: 0.25,
+    },
+    imageUrl: "/placeholder.svg?height=400&width=600",
+  },
+  {
+    id: "3",
+    date: "March 28, 2025",
+    model: "BreastNet v3.0",
+    imageId: "2",
+    doctor: "Sarah Johnson",
+    classification: {
+      benign: 0.9,
+      malignant: 0.1,
+    },
+    imageUrl: "/placeholder.svg?height=400&width=600",
+  },
+]
+
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
   const { currentUser, isLoading, allDoctors } = useUser()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -72,17 +114,16 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <Link href="/patients">
-              {/*@ts-ignore*/}
               <Button variant="ghost" size="icon">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <h1 className="text-2xl font-semibold">SONAID Case #{params.id}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold">SONAID Case #{params.id}</h1>
           </div>
 
           {/* Shared doctors display */}
           {hasSharedDoctors && (
-            <div className="flex items-center gap-2 ml-10">
+            <div className="flex flex-wrap items-center gap-2 ml-0 sm:ml-10">
               <span className="text-sm text-muted-foreground">Shared with:</span>
               <div className="flex -space-x-2">
                 <TooltipProvider>
@@ -110,34 +151,34 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             </div>
           )}
 
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:ml-auto">
             <Link href={`/patients/${params.id}/edit`}>
-              {/*@ts-ignore*/}
-              <Button variant="outline" size="sm" className="h-8 gap-1">
+              <Button variant="outline" size="sm" className="h-8 gap-1 w-full sm:w-auto">
                 <Edit className="h-4 w-4" />
                 <span>Edit</span>
               </Button>
             </Link>
-            {/*@ts-ignore*/}
-            <Button variant="destructive" size="sm" className="h-8 gap-1">
+            <Button variant="destructive" size="sm" className="h-8 gap-1 w-full sm:w-auto mt-2 sm:mt-0">
               <Trash2 className="h-4 w-4" />
               <span>Delete</span>
             </Button>
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-[1fr_250px]">
+        <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-[1fr_300px]">
           <div className="grid gap-4">
             <Card>
               <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle>Patient Information</CardTitle>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <CardTitle className="text-lg sm:text-xl">Patient Information</CardTitle>
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     <span>Created: April 10, 2025</span>
                   </div>
                 </div>
-                <CardDescription>Basic patient details and medical history</CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
+                  Basic patient details and medical history
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <PatientInfo />
@@ -148,18 +189,20 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="ultrasounds" className="flex items-center gap-2">
                   <ImageIcon className="h-4 w-4" />
-                  Ultrasound Images
+                  <span className="hidden xs:inline">Ultrasound</span> Images
                 </TabsTrigger>
                 <TabsTrigger value="predictions" className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
-                  Prediction Results
+                  <span className="hidden xs:inline">Prediction</span> Results
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="ultrasounds" className="mt-4">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Ultrasound Images</CardTitle>
-                    <CardDescription>View and manage ultrasound images for this patient</CardDescription>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg sm:text-xl">Ultrasound Images</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                      View and manage ultrasound images for this patient
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <UltrasoundGallery />
@@ -168,22 +211,36 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
               </TabsContent>
               <TabsContent value="predictions" className="mt-4">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>ML Prediction Results</CardTitle>
-                    <CardDescription>View machine learning prediction results</CardDescription>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg sm:text-xl">Breast Tumor Classification</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                      View machine learning classification results
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <PredictionResults />
+                    <BreastTumorClassification />
+                  </CardContent>
+                </Card>
+
+                <Card className="mt-6">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg sm:text-xl">Previous Classifications</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                      History of breast tumor classifications
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <PredictionHistoryQuotes predictions={mockPredictions} />
                   </CardContent>
                 </Card>
               </TabsContent>
             </Tabs>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-4 auto-rows-min">
             <Card>
-              <CardHeader>
-                <CardTitle>Case Summary</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base sm:text-lg">Case Summary</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div>
@@ -198,7 +255,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 </div>
                 <div>
                   <div className="text-sm font-medium">Department</div>
-                  <div className="text-sm">Cardiology</div>
+                  <div className="text-sm">Radiology</div>
                 </div>
                 <div>
                   <div className="text-sm font-medium">Last Updated</div>
@@ -207,8 +264,8 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
               </CardContent>
             </Card>
             <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base sm:text-lg">Recent Activity</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

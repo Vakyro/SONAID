@@ -8,7 +8,7 @@ import { PlusCircle } from "lucide-react"
 import { PatientList } from "@/components/patient-list"
 import { SonaidLogo } from "@/components/sonaid-logo"
 import { UserProfileDropdown } from "@/components/user-profile-dropdown"
-import { useUser } from "../../context/user-context"
+import { useUser } from "@/context/user-context"
 import { useEffect } from "react"
 
 export default function PatientsPage() {
@@ -46,7 +46,6 @@ export default function PatientsPage() {
           <div className="flex items-center gap-2">
             <Input placeholder="Search patients..." className="w-full sm:w-[250px]" />
             <Link href="/patients/new">
-              {/*@ts-ignore*/}
               <Button size="sm" className="h-8 gap-1">
                 <PlusCircle className="h-4 w-4" />
                 <span>New Case</span>

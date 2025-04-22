@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { SonaidLogo } from "@/components/sonaid-logo"
 import { UserProfileDropdown } from "@/components/user-profile-dropdown"
-import { useUser } from "../../context/user-context"
+import { useUser } from "@/context/user-context"
 import { useEffect } from "react"
 import { SharedCasesList } from "@/components/shared-cases-list"
 
@@ -39,7 +39,6 @@ export default function SharedCasesPage() {
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex items-center gap-2">
           <Link href="/">
-            {/* @ts-ignore */}
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>

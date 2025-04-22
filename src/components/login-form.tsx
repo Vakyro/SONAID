@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useTransitionRouter } from 'next-view-transitions'
 import { Link } from 'next-view-transitions'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ import { useUser } from "@/context/user-context"
 import { useToast } from "@/hooks/use-toast"
 
 export function LoginForm() {
-  const router = useRouter()
+  const router = useTransitionRouter()
   const { login } = useUser()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)

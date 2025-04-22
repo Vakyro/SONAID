@@ -2,13 +2,14 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Upload, X } from "lucide-react"
+import { Upload, X, AlertCircle } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 interface UltrasoundUploaderProps {
   existingImages?: boolean
@@ -17,28 +18,58 @@ interface UltrasoundUploaderProps {
 export function UltrasoundUploader({ existingImages = false }: UltrasoundUploaderProps) {
   const [files, setFiles] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
+  const [validationError, setValidationError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Mock existing images for edit mode
   const mockExistingImages = existingImages
     ? [
         {
           id: "1",
-          name: "cardiac-ultrasound-1.jpg",
+          name: "breast-ultrasound-1.jpg",
           preview: "/placeholder.svg?height=200&width=300",
-          title: "Cardiac Ultrasound 1",
+          title: "Left Breast Ultrasound",
         },
         {
           id: "2",
-          name: "cardiac-ultrasound-2.jpg",
+          name: "breast-mammogram-1.jpg",
           preview: "/placeholder.svg?height=200&width=300",
-          title: "Cardiac Ultrasound 2",
+          title: "Right Breast Mammogram",
         },
       ]
     : []
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Function to validate if the image is a breast ultrasound or mammogram
+  const validateBreastImage = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      // In a real application, you would use machine learning or image analysis
+      // to determine if the image is a breast ultrasound or mammogram
+      // For this demo, we'll simulate validation with a timeout
+      setTimeout(() => {
+        // For demo purposes, we'll accept most images but reject some based on size
+        // In a real app, you would use actual image analysis
+        const isValid = file.size < 5000000 // Less than 5MB for demo purposes
+        resolve(isValid)
+      }, 500)
+    })
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      setValidationError(null)
       const newFiles = Array.from(e.target.files)
+
+      // Validate each file
+      for (const file of newFiles) {
+        const isValid = await validateBreastImage(file)
+        if (!isValid) {
+          setValidationError(
+            "One or more images do not appear to be breast ultrasound or mammogram images. Please upload valid breast imaging.",
+          )
+          return
+        }
+      }
+
       setFiles([...files, ...newFiles])
 
       // Create preview URLs
@@ -61,13 +92,56 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
     setPreviews(newPreviews)
   }
 
+  const handleBrowseClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setValidationError(null)
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const newFiles = Array.from(e.dataTransfer.files)
+
+      // Validate each file
+      for (const file of newFiles) {
+        const isValid = await validateBreastImage(file)
+        if (!isValid) {
+          setValidationError(
+            "One or more images do not appear to be breast ultrasound or mammogram images. Please upload valid breast imaging.",
+          )
+          return
+        }
+      }
+
+      setFiles([...files, ...newFiles])
+
+      // Create preview URLs
+      const newPreviews = newFiles.map((file) => URL.createObjectURL(file))
+      setPreviews([...previews, ...newPreviews])
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">
-        <Label htmlFor="ultrasound-images">Upload Ultrasound Images</Label>
-        <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2">
+        <Label htmlFor="ultrasound-images">Upload Breast Ultrasound/Mammogram Images</Label>
+        <div
+          className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 transition-colors hover:bg-muted/50 cursor-pointer"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onClick={handleBrowseClick}
+        >
           <Upload className="h-8 w-8 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">Drag and drop your ultrasound images here</p>
+          <p className="text-sm text-muted-foreground">Drag and drop your breast ultrasound or mammogram images here</p>
           <p className="text-xs text-muted-foreground">Supported formats: JPEG, PNG, DICOM</p>
           <Input
             id="ultrasound-images"
@@ -76,14 +150,29 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
             multiple
             className="hidden"
             onChange={handleFileChange}
+            ref={fileInputRef}
           />
-          <Label htmlFor="ultrasound-images" className="cursor-pointer">
-            <Button type="button" variant="outline" size="sm">
-              Browse Files
-            </Button>
-          </Label>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation()
+              handleBrowseClick()
+            }}
+          >
+            Browse Files
+          </Button>
         </div>
       </div>
+
+      {validationError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Validation Error</AlertTitle>
+          <AlertDescription>{validationError}</AlertDescription>
+        </Alert>
+      )}
 
       {existingImages && mockExistingImages.length > 0 && (
         <div className="grid gap-2">
@@ -148,11 +237,11 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="image-title">Image Title</Label>
-            <Input id="image-title" placeholder="e.g., Cardiac Four-Chamber View" />
+            <Input id="image-title" placeholder="e.g., Left Breast Ultrasound" />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="image-description">Description</Label>
-            <Textarea id="image-description" placeholder="Enter a description of the ultrasound image..." rows={3} />
+            <Textarea id="image-description" placeholder="Enter a description of the breast imaging..." rows={3} />
           </div>
           <Button type="button" className="w-full sm:w-auto">
             Upload {previews.length} {previews.length === 1 ? "Image" : "Images"}
