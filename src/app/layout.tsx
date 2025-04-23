@@ -22,6 +22,9 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en">
+        <head>
+          <link rel="manifest" href="/manifest.json" />
+        </head>
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
             <UserProvider>

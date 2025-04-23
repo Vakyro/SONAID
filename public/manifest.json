@@ -1,0 +1,52 @@
+{
+  "name": "SONAID| AI-powered diagnostic platform",
+  "short_name": "SONAID",
+  "description": "Hospital ultrasound patient case management system",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "id": "sonaid",
+  "lang": "en",
+  "display_override": [
+    "window-controls-overlay",
+    "fullscreen"
+  ],
+  "dir": "auto",
+  "orientation": "any",
+  "categories": [
+    "health",
+    "hospital",
+    "cancer",
+    "detection",
+    "giagnostic",
+    "medical",
+    "ultrasound",
+    "ai",
+    "machin learning",
+    "artificial intelligence"
+  ]
+}
