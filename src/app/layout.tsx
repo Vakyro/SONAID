@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "SONAID - Ultrasound Patient Case Management",
   description: "Hospital ultrasound patient case management system",
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
