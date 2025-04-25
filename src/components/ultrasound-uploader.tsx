@@ -21,34 +21,34 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
   const [validationError, setValidationError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Mock existing images for edit mode
+  // Imágenes existentes simuladas para modo de edición
   const mockExistingImages = existingImages
     ? [
         {
           id: "1",
-          name: "breast-ultrasound-1.jpg",
+          name: "ultrasonido-mama-1.jpg",
           preview: "/placeholder.svg?height=200&width=300",
-          title: "Left Breast Ultrasound",
+          title: "Ultrasonido de Mama Izquierda",
         },
         {
           id: "2",
-          name: "breast-mammogram-1.jpg",
+          name: "mamografia-mama-1.jpg",
           preview: "/placeholder.svg?height=200&width=300",
-          title: "Right Breast Mammogram",
+          title: "Mamografía de Mama Derecha",
         },
       ]
     : []
 
-  // Function to validate if the image is a breast ultrasound or mammogram
+  // Función para validar si la imagen es un ultrasonido o mamografía de mama
   const validateBreastImage = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {
-      // In a real application, you would use machine learning or image analysis
-      // to determine if the image is a breast ultrasound or mammogram
-      // For this demo, we'll simulate validation with a timeout
+      // En una aplicación real, usarías aprendizaje automático o análisis de imágenes
+      // para determinar si la imagen es un ultrasonido o mamografía de mama
+      // Para esta demostración, simularemos la validación con un timeout
       setTimeout(() => {
-        // For demo purposes, we'll accept most images but reject some based on size
-        // In a real app, you would use actual image analysis
-        const isValid = file.size < 5000000 // Less than 5MB for demo purposes
+        // Para fines de demostración, aceptaremos la mayoría de las imágenes pero rechazaremos algunas basadas en tamaño
+        // En una aplicación real, usarías análisis de imagen real
+        const isValid = file.size < 5000000 // Menos de 5MB para fines de demostración
         resolve(isValid)
       }, 500)
     })
@@ -59,12 +59,12 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
       setValidationError(null)
       const newFiles = Array.from(e.target.files)
 
-      // Validate each file
+      // Validar cada archivo
       for (const file of newFiles) {
         const isValid = await validateBreastImage(file)
         if (!isValid) {
           setValidationError(
-            "One or more images do not appear to be breast ultrasound or mammogram images. Please upload valid breast imaging.",
+            "Una o más imágenes no parecen ser imágenes de ultrasonido o mamografía de mama. Por favor, suba imágenes válidas de mama.",
           )
           return
         }
@@ -72,7 +72,7 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
 
       setFiles([...files, ...newFiles])
 
-      // Create preview URLs
+      // Crear URLs de vista previa
       const newPreviews = newFiles.map((file) => URL.createObjectURL(file))
       setPreviews([...previews, ...newPreviews])
     }
@@ -82,7 +82,7 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
     const newFiles = [...files]
     const newPreviews = [...previews]
 
-    // Revoke the object URL to avoid memory leaks
+    // Revocar la URL del objeto para evitar fugas de memoria
     URL.revokeObjectURL(newPreviews[index])
 
     newFiles.splice(index, 1)
@@ -106,12 +106,12 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const newFiles = Array.from(e.dataTransfer.files)
 
-      // Validate each file
+      // Validar cada archivo
       for (const file of newFiles) {
         const isValid = await validateBreastImage(file)
         if (!isValid) {
           setValidationError(
-            "One or more images do not appear to be breast ultrasound or mammogram images. Please upload valid breast imaging.",
+            "Una o más imágenes no parecen ser imágenes de ultrasonido o mamografía de mama. Por favor, suba imágenes válidas de mama.",
           )
           return
         }
@@ -119,7 +119,7 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
 
       setFiles([...files, ...newFiles])
 
-      // Create preview URLs
+      // Crear URLs de vista previa
       const newPreviews = newFiles.map((file) => URL.createObjectURL(file))
       setPreviews([...previews, ...newPreviews])
     }
@@ -133,7 +133,7 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">
-        <Label htmlFor="ultrasound-images">Upload Breast Ultrasound/Mammogram Images</Label>
+        <Label htmlFor="ultrasound-images">Subir Imágenes de Ultrasonido/Mamografía de Mama</Label>
         <div
           className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 transition-colors hover:bg-muted/50 cursor-pointer"
           onDrop={handleDrop}
@@ -141,8 +141,10 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
           onClick={handleBrowseClick}
         >
           <Upload className="h-8 w-8 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">Drag and drop your breast ultrasound or mammogram images here</p>
-          <p className="text-xs text-muted-foreground">Supported formats: JPEG, PNG, DICOM</p>
+          <p className="text-sm text-muted-foreground">
+            Arrastre y suelte sus imágenes de ultrasonido o mamografía de mama aquí
+          </p>
+          <p className="text-xs text-muted-foreground">Formatos soportados: JPEG, PNG, DICOM</p>
           <Input
             id="ultrasound-images"
             type="file"
@@ -161,7 +163,7 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
               handleBrowseClick()
             }}
           >
-            Browse Files
+            Explorar Archivos
           </Button>
         </div>
       </div>
@@ -169,14 +171,14 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
       {validationError && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Validation Error</AlertTitle>
+          <AlertTitle>Error de Validación</AlertTitle>
           <AlertDescription>{validationError}</AlertDescription>
         </Alert>
       )}
 
       {existingImages && mockExistingImages.length > 0 && (
         <div className="grid gap-2">
-          <Label>Existing Images</Label>
+          <Label>Imágenes Existentes</Label>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {mockExistingImages.map((image) => (
               <div key={image.id} className="border rounded-lg p-2 relative">
@@ -205,14 +207,14 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
 
       {previews.length > 0 && (
         <div className="grid gap-2">
-          <Label>Selected Files</Label>
+          <Label>Archivos Seleccionados</Label>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {previews.map((preview, index) => (
               <div key={index} className="border rounded-lg p-2 relative">
                 <div className="relative aspect-video mb-2">
                   <Image
                     src={preview || "/placeholder.svg"}
-                    alt={`Preview ${index + 1}`}
+                    alt={`Vista previa ${index + 1}`}
                     fill
                     className="object-cover rounded"
                   />
@@ -236,15 +238,15 @@ export function UltrasoundUploader({ existingImages = false }: UltrasoundUploade
       {previews.length > 0 && (
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="image-title">Image Title</Label>
-            <Input id="image-title" placeholder="e.g., Left Breast Ultrasound" />
+            <Label htmlFor="image-title">Título de la Imagen</Label>
+            <Input id="image-title" placeholder="p. ej., Ultrasonido de Mama Izquierda" />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="image-description">Description</Label>
-            <Textarea id="image-description" placeholder="Enter a description of the breast imaging..." rows={3} />
+            <Label htmlFor="image-description">Descripción</Label>
+            <Textarea id="image-description" placeholder="Ingrese una descripción de la imagen mamaria..." rows={3} />
           </div>
           <Button type="button" className="w-full sm:w-auto">
-            Upload {previews.length} {previews.length === 1 ? "Image" : "Images"}
+            Subir {previews.length} {previews.length === 1 ? "Imagen" : "Imágenes"}
           </Button>
         </div>
       )}

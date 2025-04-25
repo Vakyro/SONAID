@@ -33,7 +33,7 @@ const patientSharing = {
 const mockPredictions = [
   {
     id: "1",
-    date: "April 14, 2025",
+    date: "14 de abril, 2025",
     model: "BreastNet v3.2",
     imageId: "1",
     doctor: "Sarah Johnson",
@@ -45,7 +45,7 @@ const mockPredictions = [
   },
   {
     id: "2",
-    date: "April 10, 2025",
+    date: "10 de abril, 2025",
     model: "BreastNet v3.1",
     imageId: "3",
     doctor: "Michael Chen",
@@ -57,7 +57,7 @@ const mockPredictions = [
   },
   {
     id: "3",
-    date: "March 28, 2025",
+    date: "28 de marzo, 2025",
     model: "BreastNet v3.0",
     imageId: "2",
     doctor: "Sarah Johnson",
@@ -73,6 +73,9 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
   const { currentUser, isLoading, allDoctors } = useUser()
   const router = useTransitionRouter()
 
+  // Unwrap params using React.use
+  const unwrappedParams = React.use(params)
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isLoading && !currentUser) {
@@ -81,7 +84,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
   }, [currentUser, isLoading, router])
 
   if (isLoading || !currentUser) {
-    return <div className="flex min-h-screen items-center justify-center">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center">Cargando...</div>
   }
 
   const getDoctorById = (id: string) => {
@@ -96,7 +99,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
   }
 
   // Get shared doctors for this patient
-  const sharedDoctorIds = patientSharing[params.id as keyof typeof patientSharing] || []
+  const sharedDoctorIds = patientSharing[unwrappedParams.id as keyof typeof patientSharing] || []
   const hasSharedDoctors = sharedDoctorIds.length > 0
 
   return (
@@ -118,13 +121,13 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <h1 className="text-xl sm:text-2xl font-semibold">SONAID Case #{params.id}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold">Caso SONAID #{unwrappedParams.id}</h1>
           </div>
 
           {/* Shared doctors display */}
           {hasSharedDoctors && (
             <div className="flex flex-wrap items-center gap-2 ml-0 sm:ml-10">
-              <span className="text-sm text-muted-foreground">Shared with:</span>
+              <span className="text-sm text-muted-foreground">Compartido con:</span>
               <div className="flex -space-x-2">
                 <TooltipProvider>
                   {sharedDoctorIds.map((doctorId) => {
@@ -155,12 +158,12 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             <Link href={`/patients/${params.id}/edit`}>
               <Button variant="outline" size="sm" className="h-8 gap-1 w-full sm:w-auto">
                 <Edit className="h-4 w-4" />
-                <span>Edit</span>
+                <span>Editar</span>
               </Button>
             </Link>
             <Button variant="destructive" size="sm" className="h-8 gap-1 w-full sm:w-auto mt-2 sm:mt-0">
               <Trash2 className="h-4 w-4" />
-              <span>Delete</span>
+              <span>Eliminar</span>
             </Button>
           </div>
         </div>
@@ -170,14 +173,14 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <CardTitle className="text-lg sm:text-xl">Patient Information</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl">Información del Paciente</CardTitle>
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    <span>Created: April 10, 2025</span>
+                    <span>Creado: 10 de abril, 2025</span>
                   </div>
                 </div>
                 <CardDescription className="text-xs sm:text-sm">
-                  Basic patient details and medical history
+                  Detalles básicos del paciente e historial médico
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -189,19 +192,19 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="ultrasounds" className="flex items-center gap-2">
                   <ImageIcon className="h-4 w-4" />
-                  <span className="hidden xs:inline">Ultrasound</span> Images
+                  <span className="hidden xs:inline">Imágenes de</span> Ultrasonido
                 </TabsTrigger>
                 <TabsTrigger value="predictions" className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
-                  <span className="hidden xs:inline">Prediction</span> Results
+                  <span className="hidden xs:inline">Resultados de</span> Predicción
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="ultrasounds" className="mt-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg sm:text-xl">Ultrasound Images</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Imágenes de Ultrasonido</CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                      View and manage ultrasound images for this patient
+                      Ver y gestionar imágenes de ultrasonido para este paciente
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -212,9 +215,9 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
               <TabsContent value="predictions" className="mt-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg sm:text-xl">Breast Tumor Classification</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Clasificación de Tumor Mamario</CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                      View machine learning classification results
+                      Ver resultados de clasificación de aprendizaje automático
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -224,9 +227,9 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
 
                 <Card className="mt-6">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg sm:text-xl">Previous Classifications</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Clasificaciones Anteriores</CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                      History of breast tumor classifications
+                      Historial de clasificaciones de tumores mamarios
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -240,46 +243,46 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
           <div className="grid gap-4 auto-rows-min">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base sm:text-lg">Case Summary</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Resumen del Caso</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div>
-                  <div className="text-sm font-medium">Status</div>
+                  <div className="text-sm font-medium">Estado</div>
                   <div className="rounded-full bg-green-100 text-green-700 px-2 py-1 text-xs font-medium inline-block mt-1">
-                    Active
+                    Activo
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Attending Physician</div>
-                  <div className="text-sm">Dr. Sarah Johnson</div>
+                  <div className="text-sm font-medium">Médico Tratante</div>
+                  <div className="text-sm">Dra. Sarah Johnson</div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Department</div>
-                  <div className="text-sm">Radiology</div>
+                  <div className="text-sm font-medium">Departamento</div>
+                  <div className="text-sm">Radiología</div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Last Updated</div>
-                  <div className="text-sm">April 14, 2025</div>
+                  <div className="text-sm font-medium">Última Actualización</div>
+                  <div className="text-sm">14 de abril, 2025</div>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base sm:text-lg">Recent Activity</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Actividad Reciente</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid gap-1">
-                    <div className="text-sm">Ultrasound image uploaded</div>
-                    <div className="text-xs text-muted-foreground">April 14, 2025 - 10:23 AM</div>
+                    <div className="text-sm">Imagen de ultrasonido subida</div>
+                    <div className="text-xs text-muted-foreground">14 de abril, 2025 - 10:23 AM</div>
                   </div>
                   <div className="grid gap-1">
-                    <div className="text-sm">Patient information updated</div>
-                    <div className="text-xs text-muted-foreground">April 12, 2025 - 2:45 PM</div>
+                    <div className="text-sm">Información del paciente actualizada</div>
+                    <div className="text-xs text-muted-foreground">12 de abril, 2025 - 2:45 PM</div>
                   </div>
                   <div className="grid gap-1">
-                    <div className="text-sm">Case created</div>
-                    <div className="text-xs text-muted-foreground">April 10, 2025 - 9:30 AM</div>
+                    <div className="text-sm">Caso creado</div>
+                    <div className="text-xs text-muted-foreground">10 de abril, 2025 - 9:30 AM</div>
                   </div>
                 </div>
               </CardContent>

@@ -38,58 +38,62 @@ export function NewPatientForm() {
       <div className="grid gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Patient Information</CardTitle>
-            <CardDescription>Enter the basic information about the patient</CardDescription>
+            <CardTitle>Información del Paciente</CardTitle>
+            <CardDescription>Ingrese la información básica sobre el paciente</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="first-name">First Name</Label>
+                <Label htmlFor="first-name">Nombre</Label>
                 <Input id="first-name" required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="last-name">Last Name</Label>
+                <Label htmlFor="last-name">Apellido</Label>
                 <Input id="last-name" required />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="dob">Date of Birth</Label>
+                <Label htmlFor="dob">Fecha de Nacimiento</Label>
                 <Input id="dob" type="date" required />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="gender">Gender</Label>
-                <RadioGroup id="gender" defaultValue="female" className="flex gap-4">
+              <div className="grid gap-2 col-span-1 md:col-span-1">
+                <Label htmlFor="gender">Género</Label>
+                <RadioGroup
+                  id="gender"
+                  defaultValue="female"
+                  className="flex flex-wrap gap-2"
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">Female</Label>
+                    <Label htmlFor="female">Femenino</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">Male</Label>
+                    <Label htmlFor="male">Masculino</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="other" id="other" />
-                    <Label htmlFor="other">Other</Label>
+                    <Label htmlFor="other">Otro</Label>
                   </div>
                 </RadioGroup>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="patient-id">Patient ID</Label>
-                <Input id="patient-id" placeholder="Optional" />
+                <Label htmlFor="patient-id">ID de Paciente</Label>
+                <Input id="patient-id" placeholder="Opcional" />
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="department">Department</Label>
+              <Label htmlFor="department">Departamento</Label>
               <Select defaultValue="breast-imaging">
                 <SelectTrigger id="department">
-                  <SelectValue placeholder="Select department" />
+                  <SelectValue placeholder="Seleccionar departamento" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="breast-imaging">Breast Imaging</SelectItem>
-                  <SelectItem value="oncology">Oncology</SelectItem>
-                  <SelectItem value="radiology">Radiology</SelectItem>
-                  <SelectItem value="surgery">Surgery</SelectItem>
+                <SelectContent className="bg-white">
+                  <SelectItem value="breast-imaging">Imagen Mamaria</SelectItem>
+                  <SelectItem value="oncology">Oncología</SelectItem>
+                  <SelectItem value="radiology">Radiología</SelectItem>
+                  <SelectItem value="surgery">Cirugía</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -98,29 +102,29 @@ export function NewPatientForm() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Medical Information</CardTitle>
-            <CardDescription>Enter relevant medical details for this case</CardDescription>
+            <CardTitle>Información Médica</CardTitle>
+            <CardDescription>Ingrese detalles médicos relevantes para este caso</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="chief-complaint">Chief Complaint</Label>
+              <Label htmlFor="chief-complaint">Motivo de Consulta</Label>
               <Input id="chief-complaint" required />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="breast-history">Breast Health History</Label>
+              <Label htmlFor="breast-history">Historial de Salud Mamaria</Label>
               <Textarea
                 id="breast-history"
                 rows={4}
-                placeholder="Previous breast conditions, family history of breast cancer, etc."
+                placeholder="Condiciones mamarias previas, antecedentes familiares de cáncer de mama, etc."
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="previous-mammogram">Previous Mammogram</Label>
+                <Label htmlFor="previous-mammogram">Mamografía Previa</Label>
                 <RadioGroup id="previous-mammogram" defaultValue="no" className="flex gap-4">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="yes" id="previous-yes" />
-                    <Label htmlFor="previous-yes">Yes</Label>
+                    <Label htmlFor="previous-yes">Sí</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="no" id="previous-no" />
@@ -129,11 +133,11 @@ export function NewPatientForm() {
                 </RadioGroup>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="previous-biopsies">Previous Breast Biopsies</Label>
+                <Label htmlFor="previous-biopsies">Biopsias Mamarias Previas</Label>
                 <RadioGroup id="previous-biopsies" defaultValue="no" className="flex gap-4">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="yes" id="biopsies-yes" />
-                    <Label htmlFor="biopsies-yes">Yes</Label>
+                    <Label htmlFor="biopsies-yes">Sí</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="no" id="biopsies-no" />
@@ -143,7 +147,7 @@ export function NewPatientForm() {
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="current-medications">Current Medications</Label>
+              <Label htmlFor="current-medications">Medicamentos Actuales</Label>
               <Textarea id="current-medications" rows={3} />
             </div>
           </CardContent>
@@ -151,8 +155,8 @@ export function NewPatientForm() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Breast Ultrasound/Mammogram Image</CardTitle>
-            <CardDescription>Upload and validate breast imaging for analysis</CardDescription>
+            <CardTitle>Imagen de Ultrasonido/Mamografía de Mama</CardTitle>
+            <CardDescription>Suba y valide imágenes mamarias para análisis</CardDescription>
           </CardHeader>
           <CardContent>
             <ImageValidator onValidImage={handleValidImage} />
@@ -161,18 +165,18 @@ export function NewPatientForm() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Additional Notes</CardTitle>
-            <CardDescription>Any other relevant information for this case</CardDescription>
+            <CardTitle>Notas Adicionales</CardTitle>
+            <CardDescription>Cualquier otra información relevante para este caso</CardDescription>
           </CardHeader>
           <CardContent>
-            <Textarea rows={4} placeholder="Enter any additional notes or observations..." />
+            <Textarea rows={4} placeholder="Ingrese cualquier nota adicional u observaciones..." />
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button variant="outline" type="button" onClick={() => router.push("/patients")}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={isSubmitting || !validatedImage}>
-              {isSubmitting ? "Creating..." : "Create Patient Case"}
+              {isSubmitting ? "Creando..." : "Crear Caso de Paciente"}
             </Button>
           </CardFooter>
         </Card>

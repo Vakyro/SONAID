@@ -1,7 +1,6 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { format } from "date-fns"
 import { AlertCircle, Clock } from "lucide-react"
 
 interface PredictionResult {
@@ -21,10 +20,10 @@ interface PredictionHistoryQuotesProps {
 
 export function PredictionHistoryQuotes({ predictions }: PredictionHistoryQuotesProps) {
   if (!predictions.length) {
-    return <div className="text-center text-muted-foreground py-8">No previous predictions available</div>
+    return <div className="text-center text-muted-foreground py-8">No hay predicciones previas disponibles</div>
   }
 
-  // Sort predictions by date (newest first)
+  // Ordenar predicciones por fecha (más reciente primero)
   const sortedPredictions = [...predictions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   return (
@@ -50,6 +49,9 @@ export function PredictionHistoryQuotes({ predictions }: PredictionHistoryQuotes
           borderColor = "border-amber-200"
         }
 
+        // Traducir la clase dominante
+        const translatedClass = dominantClass === "benign" ? "benigno" : "maligno"
+
         return (
           <Card key={prediction.id} className={`border-l-4 ${borderColor}`}>
             <CardContent className="p-4">
@@ -57,15 +59,15 @@ export function PredictionHistoryQuotes({ predictions }: PredictionHistoryQuotes
                 <div className="mt-1">{icon}</div>
                 <div className="flex-1">
                   <blockquote className="text-xs sm:text-sm italic">
-                    "The breast ultrasound analysis indicates a {dominantClass} finding with
+                    "El análisis de ultrasonido mamario indica un hallazgo {translatedClass} con
                     {dominantClass === "benign"
                       ? ` ${benignPercentage.toFixed(1)}%`
                       : ` ${malignantPercentage.toFixed(1)}%`}{" "}
-                    confidence."
+                    de confianza."
                   </blockquote>
                   <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-xs text-muted-foreground">
                     <span>Dr. {prediction.doctor}</span>
-                    <span className="mt-1 sm:mt-0">{format(new Date(prediction.date), "MMM d, yyyy")}</span>
+                    <span className="mt-1 sm:mt-0">{prediction.date}</span>
                   </div>
                 </div>
               </div>

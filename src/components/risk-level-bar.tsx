@@ -8,18 +8,18 @@ interface RiskLevelBarProps {
 
 export function RiskLevelBar({
   riskScore,
-  title = "Risk Level",
-  description = "Assessment of risk based on classification results",
+  title = "Nivel de Riesgo",
+  description = "Evaluación de riesgo basada en resultados de clasificación",
 }: RiskLevelBarProps) {
-  // Ensure risk score is within bounds
+  // Asegurar que la puntuación de riesgo esté dentro de los límites
   const normalizedScore = Math.max(0, Math.min(100, riskScore))
 
-  // Determine risk category - now only Low or High (no Medium)
-  let riskCategory = "Low Risk"
+  // Determinar categoría de riesgo - ahora solo Bajo o Alto (sin Medio)
+  let riskCategory = "Riesgo Bajo"
   let textColor = "text-amber-600"
 
   if (normalizedScore >= 50) {
-    riskCategory = "High Risk"
+    riskCategory = "Riesgo Alto"
     textColor = "text-red-600"
   }
 
@@ -32,9 +32,9 @@ export function RiskLevelBar({
       <CardContent>
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-xs sm:text-sm font-medium">Low</span>
+            <span className="text-xs sm:text-sm font-medium">Bajo</span>
             <span className={`text-base sm:text-lg font-bold ${textColor}`}>{riskCategory}</span>
-            <span className="text-xs sm:text-sm font-medium">High</span>
+            <span className="text-xs sm:text-sm font-medium">Alto</span>
           </div>
 
           <div className="h-3 sm:h-4 w-full bg-gray-200 rounded-full overflow-hidden">

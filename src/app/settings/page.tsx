@@ -19,7 +19,7 @@ export default function SettingsPage() {
   const { currentUser, isLoading } = useUser()
   const router = useTransitionRouter()
   const [theme, setTheme] = useState("light")
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState("es")
   const [notifications, setNotifications] = useState(true)
   const [emailNotifications, setEmailNotifications] = useState(true)
   const [autoLogout, setAutoLogout] = useState(true)
@@ -32,7 +32,7 @@ export default function SettingsPage() {
   }, [currentUser, isLoading, router])
 
   if (isLoading || !currentUser) {
-    return <div className="flex min-h-screen items-center justify-center">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center">Cargando...</div>
   }
 
   return (
@@ -53,56 +53,56 @@ export default function SettingsPage() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-semibold">Settings</h1>
+          <h1 className="text-2xl font-semibold">Configuración</h1>
         </div>
 
         <Tabs defaultValue="general" className="w-full max-w-4xl mx-auto">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="notifications">Notificaciones</TabsTrigger>
+            <TabsTrigger value="security">Seguridad</TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Appearance</CardTitle>
-                <CardDescription>Customize how SONAID looks on your device</CardDescription>
+                <CardTitle>Apariencia</CardTitle>
+                <CardDescription>Personalice cómo se ve SONAID en su dispositivo</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Theme</Label>
+                  <Label>Tema</Label>
                   <RadioGroup defaultValue={theme} onValueChange={setTheme} className="flex flex-col sm:flex-row gap-4">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="light" id="light" />
                       <Label htmlFor="light" className="flex items-center gap-2">
                         <Sun className="h-4 w-4" />
-                        Light
+                        Claro
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="dark" id="dark" />
                       <Label htmlFor="dark" className="flex items-center gap-2">
                         <Moon className="h-4 w-4" />
-                        Dark
+                        Oscuro
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="system" id="system" />
-                      <Label htmlFor="system">System</Label>
+                      <Label htmlFor="system">Sistema</Label>
                     </div>
                   </RadioGroup>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="language">Language</Label>
+                  <Label htmlFor="language">Idioma</Label>
                   <Select defaultValue={language} onValueChange={setLanguage}>
                     <SelectTrigger id="language" className="w-full sm:w-[240px]">
-                      <SelectValue placeholder="Select language" />
+                      <SelectValue placeholder="Seleccionar idioma" />
                     </SelectTrigger>
-                    <SelectContent className='bg-white'>
-                      <SelectItem value="en">English</SelectItem>
+                    <SelectContent>
                       <SelectItem value="es">Español</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
                       <SelectItem value="fr">Français</SelectItem>
                       <SelectItem value="de">Deutsch</SelectItem>
                       <SelectItem value="zh">中文</SelectItem>
@@ -114,15 +114,15 @@ export default function SettingsPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Display Settings</CardTitle>
-                <CardDescription>Configure how patient data is displayed</CardDescription>
+                <CardTitle>Configuración de Visualización</CardTitle>
+                <CardDescription>Configure cómo se muestran los datos de los pacientes</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="compact-view" className="flex flex-col gap-1">
-                    <span>Compact View</span>
+                    <span>Vista Compacta</span>
                     <span className="font-normal text-xs text-muted-foreground">
-                      Display more patients per page with less details
+                      Mostrar más pacientes por página con menos detalles
                     </span>
                   </Label>
                   <Switch id="compact-view" />
@@ -130,25 +130,25 @@ export default function SettingsPage() {
 
                 <div className="flex items-center justify-between">
                   <Label htmlFor="show-thumbnails" className="flex flex-col gap-1">
-                    <span>Show Image Thumbnails</span>
+                    <span>Mostrar Miniaturas de Imágenes</span>
                     <span className="font-normal text-xs text-muted-foreground">
-                      Display thumbnail previews in patient lists
+                      Mostrar vistas previas en miniatura en las listas de pacientes
                     </span>
                   </Label>
                   <Switch id="show-thumbnails" defaultChecked />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="default-sort">Default Sort Order</Label>
+                  <Label htmlFor="default-sort">Orden de Clasificación Predeterminado</Label>
                   <Select defaultValue="date-desc">
                     <SelectTrigger id="default-sort" className="w-full sm:w-[240px]">
-                      <SelectValue placeholder="Select sort order" />
+                      <SelectValue placeholder="Seleccionar orden" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="date-desc">Newest First</SelectItem>
-                      <SelectItem value="date-asc">Oldest First</SelectItem>
-                      <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-                      <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                      <SelectItem value="date-desc">Más Recientes Primero</SelectItem>
+                      <SelectItem value="date-asc">Más Antiguos Primero</SelectItem>
+                      <SelectItem value="name-asc">Nombre (A-Z)</SelectItem>
+                      <SelectItem value="name-desc">Nombre (Z-A)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -159,15 +159,15 @@ export default function SettingsPage() {
           <TabsContent value="notifications" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Notification Preferences</CardTitle>
-                <CardDescription>Control how you receive notifications</CardDescription>
+                <CardTitle>Preferencias de Notificación</CardTitle>
+                <CardDescription>Controle cómo recibe las notificaciones</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="app-notifications" className="flex flex-col gap-1">
-                    <span>In-App Notifications</span>
+                    <span>Notificaciones en la Aplicación</span>
                     <span className="font-normal text-xs text-muted-foreground">
-                      Receive notifications within SONAID
+                      Recibir notificaciones dentro de SONAID
                     </span>
                   </Label>
                   <Switch
@@ -180,8 +180,10 @@ export default function SettingsPage() {
 
                 <div className="flex items-center justify-between">
                   <Label htmlFor="email-notifications" className="flex flex-col gap-1">
-                    <span>Email Notifications</span>
-                    <span className="font-normal text-xs text-muted-foreground">Receive notifications via email</span>
+                    <span>Notificaciones por Correo Electrónico</span>
+                    <span className="font-normal text-xs text-muted-foreground">
+                      Recibir notificaciones por correo electrónico
+                    </span>
                   </Label>
                   <Switch
                     id="email-notifications"
@@ -195,14 +197,14 @@ export default function SettingsPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Notification Types</CardTitle>
-                <CardDescription>Select which events trigger notifications</CardDescription>
+                <CardTitle>Tipos de Notificación</CardTitle>
+                <CardDescription>Seleccione qué eventos activan notificaciones</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="new-cases" className="flex items-center gap-2">
                     <BellRing className="h-4 w-4" />
-                    New shared cases
+                    Nuevos casos compartidos
                   </Label>
                   <Switch id="new-cases" defaultChecked />
                 </div>
@@ -210,7 +212,7 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor="case-updates" className="flex items-center gap-2">
                     <BellRing className="h-4 w-4" />
-                    Updates to existing cases
+                    Actualizaciones a casos existentes
                   </Label>
                   <Switch id="case-updates" defaultChecked />
                 </div>
@@ -218,7 +220,7 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor="new-images" className="flex items-center gap-2">
                     <BellRing className="h-4 w-4" />
-                    New ultrasound images
+                    Nuevas imágenes de ultrasonido
                   </Label>
                   <Switch id="new-images" defaultChecked />
                 </div>
@@ -226,7 +228,7 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor="ml-predictions" className="flex items-center gap-2">
                     <BellRing className="h-4 w-4" />
-                    ML prediction results
+                    Resultados de predicción ML
                   </Label>
                   <Switch id="ml-predictions" defaultChecked />
                 </div>
@@ -237,14 +239,14 @@ export default function SettingsPage() {
           <TabsContent value="security" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Security Settings</CardTitle>
-                <CardDescription>Manage your account security preferences</CardDescription>
+                <CardTitle>Configuración de Seguridad</CardTitle>
+                <CardDescription>Administre sus preferencias de seguridad de cuenta</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="two-factor" className="flex items-center gap-2">
                     <Lock className="h-4 w-4" />
-                    Two-factor authentication
+                    Autenticación de dos factores
                   </Label>
                   <Switch id="two-factor" />
                 </div>
@@ -253,49 +255,49 @@ export default function SettingsPage() {
                   <Label htmlFor="auto-logout" className="flex flex-col gap-1">
                     <span className="flex items-center gap-2">
                       <Eye className="h-4 w-4" />
-                      Auto-logout after inactivity
+                      Cierre de sesión automático por inactividad
                     </span>
                     <span className="font-normal text-xs text-muted-foreground">
-                      Automatically log out after 30 minutes of inactivity
+                      Cerrar sesión automáticamente después de 30 minutos de inactividad
                     </span>
                   </Label>
                   <Switch id="auto-logout" checked={autoLogout} onCheckedChange={setAutoLogout} defaultChecked />
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col items-start gap-2">
-                <Button variant="outline">Change Password</Button>
-                <p className="text-xs text-muted-foreground">Last password change: 45 days ago</p>
+                <Button variant="outline">Cambiar Contraseña</Button>
+                <p className="text-xs text-muted-foreground">Último cambio de contraseña: hace 45 días</p>
               </CardFooter>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Session Management</CardTitle>
-                <CardDescription>Manage your active sessions</CardDescription>
+                <CardTitle>Gestión de Sesiones</CardTitle>
+                <CardDescription>Administre sus sesiones activas</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="font-medium">Current Session</p>
-                      <p className="text-sm text-muted-foreground">Chrome on Windows • IP: 192.168.1.1</p>
+                      <p className="font-medium">Sesión Actual</p>
+                      <p className="text-sm text-muted-foreground">Chrome en Windows • IP: 192.168.1.1</p>
                     </div>
-                    <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Active Now</div>
+                    <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Activo Ahora</div>
                   </div>
 
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="font-medium">Mobile App</p>
-                      <p className="text-sm text-muted-foreground">iPhone 13 • Last active: 2 days ago</p>
+                      <p className="font-medium">Aplicación Móvil</p>
+                      <p className="text-sm text-muted-foreground">iPhone 13 • Última actividad: hace 2 días</p>
                     </div>
                     <Button variant="outline" size="sm">
-                      Revoke
+                      Revocar
                     </Button>
                   </div>
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="destructive">Log Out All Devices</Button>
+                <Button variant="destructive">Cerrar Sesión en Todos los Dispositivos</Button>
               </CardFooter>
             </Card>
           </TabsContent>

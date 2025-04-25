@@ -12,14 +12,14 @@ export default function ForgotPasswordPage() {
             <SonaidLogo size={32} />
             <h1 className="text-3xl font-bold tracking-tighter">SONAID</h1>
           </div>
-          <p className="text-gray-500 dark:text-gray-400">Ultrasound-based patient case management system</p>
+          <p className="text-gray-500 dark:text-gray-400">Sistema de gestión de casos de pacientes con ultrasonido</p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Reset Password</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Restablecer Contraseña</CardTitle>
             <CardDescription className="text-center">
-              Enter your email address and we'll send you a link to reset your password
+              Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -27,13 +27,13 @@ export default function ForgotPasswordPage() {
           </CardContent>
           <CardFooter className="flex justify-center">
             <Link href="/login" className="text-sm text-primary hover:underline">
-              Back to login
+              Volver al inicio de sesión
             </Link>
           </CardFooter>
         </Card>
 
         <div className="text-center text-sm text-gray-500">
-          &copy; 2025 SONAID Medical Systems. All rights reserved.
+          &copy; 2025 SONAID Medical Systems. Todos los derechos reservados.
         </div>
       </div>
     </div>

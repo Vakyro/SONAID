@@ -15,9 +15,9 @@ const patients = [
     name: "John Smith",
     age: 45,
     gender: "Male",
-    dateCreated: "April 10, 2025",
-    department: "Cardiology",
-    status: "Active",
+    dateCreated: "10 de abril, 2025",
+    department: "Cardiología",
+    status: "Activo",
     imageCount: 3,
     sharedWith: ["2", "3"], // Doctor IDs this case is shared with
   },
@@ -26,9 +26,9 @@ const patients = [
     name: "Emily Johnson",
     age: 32,
     gender: "Female",
-    dateCreated: "April 9, 2025",
-    department: "Obstetrics",
-    status: "Pending",
+    dateCreated: "9 de abril, 2025",
+    department: "Obstetricia",
+    status: "Pendiente",
     imageCount: 2,
     sharedWith: [], // Not shared
   },
@@ -37,9 +37,9 @@ const patients = [
     name: "Michael Brown",
     age: 58,
     gender: "Male",
-    dateCreated: "April 8, 2025",
-    department: "Neurology",
-    status: "Active",
+    dateCreated: "8 de abril, 2025",
+    department: "Neurología",
+    status: "Activo",
     imageCount: 5,
     sharedWith: ["2"], // Shared with one doctor
   },
@@ -48,9 +48,9 @@ const patients = [
     name: "Sarah Davis",
     age: 27,
     gender: "Female",
-    dateCreated: "April 7, 2025",
-    department: "Orthopedics",
-    status: "Completed",
+    dateCreated: "7 de abril, 2025",
+    department: "Ortopedia",
+    status: "Completado",
     imageCount: 1,
     sharedWith: [], // Not shared
   },
@@ -68,6 +68,21 @@ export function PatientList() {
       .split(" ")
       .map((n) => n[0])
       .join("")
+  }
+
+  // Función para traducir el estado
+  const translateStatus = (status: string) => {
+    const statusMap: Record<string, string> = {
+      Active: "Activo",
+      Pending: "Pendiente",
+      Completed: "Completado",
+    }
+    return statusMap[status] || status
+  }
+
+  // Función para traducir el género
+  const translateGender = (gender: string) => {
+    return gender === "Male" ? "Masculino" : gender === "Female" ? "Femenino" : gender
   }
 
   return (
@@ -89,36 +104,36 @@ export function PatientList() {
                   <div>
                     <div className="font-medium">{patient.name}</div>
                     <div className="text-sm text-muted-foreground">
-                      {patient.age} years, {patient.gender}
+                      {patient.age} años, {translateGender(patient.gender)}
                     </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm w-full sm:w-auto">
                   <div>
-                    <div className="font-medium">Department</div>
+                    <div className="font-medium">Departamento</div>
                     <div className="text-muted-foreground">{patient.department}</div>
                   </div>
                   <div>
-                    <div className="font-medium">Created</div>
+                    <div className="font-medium">Creado</div>
                     <div className="text-muted-foreground">{patient.dateCreated}</div>
                   </div>
                   <div>
-                    <div className="font-medium">Status</div>
+                    <div className="font-medium">Estado</div>
                     <div
                       className={`rounded-full px-2 py-0.5 text-xs font-medium inline-block
                       ${
-                        patient.status === "Active"
+                        patient.status === "Active" || patient.status === "Activo"
                           ? "bg-green-100 text-green-700"
-                          : patient.status === "Pending"
+                          : patient.status === "Pending" || patient.status === "Pendiente"
                             ? "bg-yellow-100 text-yellow-700"
                             : "bg-blue-100 text-blue-700"
                       }`}
                     >
-                      {patient.status}
+                      {translateStatus(patient.status)}
                     </div>
                   </div>
                   <div>
-                    <div className="font-medium">Images</div>
+                    <div className="font-medium">Imágenes</div>
                     <div className="flex items-center gap-1 text-muted-foreground">
                       <ImageIcon className="h-3 w-3" />
                       {patient.imageCount}
@@ -136,7 +151,7 @@ export function PatientList() {
                 <div className="border-t pt-3">
                   <div className="flex items-center gap-2">
                     <Share2 className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-xs font-medium">Shared with:</span>
+                    <span className="text-xs font-medium">Compartido con:</span>
                     <div className="flex -space-x-2">
                       <TooltipProvider>
                         {patient.sharedWith.map((doctorId) => {

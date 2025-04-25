@@ -22,12 +22,12 @@ export function ForgotPasswordForm() {
     e.preventDefault()
 
     if (!email) {
-      setError("Email is required")
+      setError("El correo electrónico es obligatorio")
       return
     }
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address")
+      setError("Por favor, ingrese un correo electrónico válido")
       return
     }
 
@@ -48,15 +48,15 @@ export function ForgotPasswordForm() {
           <CheckCircle2 className="h-6 w-6 text-green-600" />
         </div>
         <div className="text-center">
-          <h3 className="text-lg font-medium">Check your email</h3>
+          <h3 className="text-lg font-medium">Revise su correo electrónico</h3>
           <p className="text-sm text-gray-500 mt-1">
-            We've sent a password reset link to <span className="font-medium">{email}</span>
+            Hemos enviado un enlace para restablecer la contraseña a <span className="font-medium">{email}</span>
           </p>
         </div>
         <p className="text-xs text-gray-500 text-center mt-4">
-          Didn't receive the email? Check your spam folder or{" "}
+          ¿No recibió el correo? Revise su carpeta de spam o{" "}
           <button className="text-primary hover:underline" onClick={() => setIsSubmitted(false)}>
-            try again
+            intente de nuevo
           </button>
         </p>
       </div>
@@ -66,7 +66,7 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">Correo Electrónico</Label>
         <Input
           id="email"
           type="email"
@@ -84,10 +84,10 @@ export function ForgotPasswordForm() {
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Sending...
+            Enviando...
           </>
         ) : (
-          "Send reset link"
+          "Enviar enlace de restablecimiento"
         )}
       </Button>
     </form>

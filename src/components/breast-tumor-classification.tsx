@@ -23,7 +23,7 @@ import { ClinicalRecommendations } from "@/components/clinical-recommendations"
 const mockPredictions = [
   {
     id: "1",
-    date: "April 14, 2025",
+    date: "14 de abril, 2025",
     model: "BreastNet v3.2",
     imageId: "1",
     results: {
@@ -34,14 +34,14 @@ const mockPredictions = [
       primaryClass: "malignant" as const,
       confidence: 0.92,
       riskScore: 75,
-      findings: ["Irregular mass with spiculated margins", "Posterior acoustic shadowing"],
+      findings: ["Masa irregular con márgenes espiculados", "Sombra acústica posterior"],
       additionalDetails:
-        "Hypoechoic mass measuring 2.1 x 1.8 cm with irregular margins and heterogeneous internal echoes. Findings are highly suspicious for malignancy.",
+        "Masa hipoecoica que mide 2.1 x 1.8 cm con márgenes irregulares y ecos internos heterogéneos. Los hallazgos son altamente sospechosos de malignidad.",
     },
   },
   {
     id: "2",
-    date: "April 10, 2025",
+    date: "10 de abril, 2025",
     model: "BreastNet v3.1",
     imageId: "3",
     results: {
@@ -52,14 +52,14 @@ const mockPredictions = [
       primaryClass: "benign" as const,
       confidence: 0.87,
       riskScore: 40,
-      findings: ["Well-circumscribed mass", "No posterior acoustic features"],
+      findings: ["Masa bien circunscrita", "Sin características acústicas posteriores"],
       additionalDetails:
-        "Well-defined hypoechoic mass measuring 1.5 x 1.3 cm with smooth margins. Features are consistent with a benign lesion, likely fibroadenoma.",
+        "Masa hipoecoica bien definida que mide 1.5 x 1.3 cm con márgenes lisos. Las características son consistentes con una lesión benigna, probablemente un fibroadenoma.",
     },
   },
   {
     id: "3",
-    date: "March 28, 2025",
+    date: "28 de marzo, 2025",
     model: "BreastNet v3.0",
     imageId: "2",
     results: {
@@ -70,9 +70,9 @@ const mockPredictions = [
       primaryClass: "benign" as const,
       confidence: 0.95,
       riskScore: 25,
-      findings: ["Well-defined mass", "No suspicious calcifications"],
+      findings: ["Masa bien definida", "Sin calcificaciones sospechosas"],
       additionalDetails:
-        "Well-defined mass with homogeneous internal echoes. No suspicious calcifications or architectural distortion. Features are consistent with a benign lesion.",
+        "Masa bien definida con ecos internos homogéneos. Sin calcificaciones sospechosas ni distorsión arquitectónica. Las características son consistentes con una lesión benigna.",
     },
   },
 ]
@@ -93,21 +93,26 @@ export function BreastTumorClassification() {
     setIsDetailsOpen(true)
   }
 
+  // Función para traducir la clasificación primaria
+  const translatePrimaryClass = (primaryClass: string) => {
+    return primaryClass === "benign" ? "Benigno" : "Maligno"
+  }
+
   return (
     <div className="grid gap-4">
       <Alert>
         <InfoIcon className="h-4 w-4" />
-        <AlertTitle>Machine Learning Integration Ready</AlertTitle>
+        <AlertTitle>Integración de Aprendizaje Automático Lista</AlertTitle>
         <AlertDescription>
-          This section will display breast tumor classification results from the ML model once integrated. Currently
-          showing sample data.
+          Esta sección mostrará los resultados de clasificación de tumores mamarios del modelo de IA una vez integrado.
+          Actualmente muestra datos de ejemplo.
         </AlertDescription>
       </Alert>
 
       <Tabs defaultValue="results" onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="results">Latest Results</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="results">Últimos Resultados</TabsTrigger>
+          <TabsTrigger value="history">Historial</TabsTrigger>
         </TabsList>
         <TabsContent value="results" className="mt-4">
           {mockPredictions.length > 0 ? (
@@ -115,9 +120,9 @@ export function BreastTumorClassification() {
               <Card>
                 <CardHeader className="pb-2 flex flex-col sm:flex-row justify-between">
                   <div>
-                    <CardTitle className="text-xl md:text-2xl">Latest Classification</CardTitle>
+                    <CardTitle className="text-xl md:text-2xl">Última Clasificación</CardTitle>
                     <CardDescription className="text-sm">
-                      Model: {mockPredictions[0].model} | Confidence:{" "}
+                      Modelo: {mockPredictions[0].model} | Confianza:{" "}
                       {(mockPredictions[0].results.confidence * 100).toFixed(1)}%
                     </CardDescription>
                   </div>
@@ -128,7 +133,7 @@ export function BreastTumorClassification() {
                 <CardContent>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="border rounded-lg p-4">
-                      <div className="text-sm font-medium text-muted-foreground mb-2">Primary Classification</div>
+                      <div className="text-sm font-medium text-muted-foreground mb-2">Clasificación Primaria</div>
                       <div className="flex items-center gap-2">
                         <div
                           className={`w-4 h-4 rounded-full ${
@@ -136,12 +141,12 @@ export function BreastTumorClassification() {
                           }`}
                         ></div>
                         <div className="text-xl md:text-2xl font-bold capitalize">
-                          {mockPredictions[0].results.primaryClass}
+                          {translatePrimaryClass(mockPredictions[0].results.primaryClass)}
                         </div>
                       </div>
                     </div>
                     <div className="border rounded-lg p-4">
-                      <div className="text-sm font-medium text-muted-foreground mb-2">Risk Score</div>
+                      <div className="text-sm font-medium text-muted-foreground mb-2">Nivel de Riesgo</div>
                       <div className="text-xl md:text-2xl font-bold">{mockPredictions[0].results.riskScore}/100</div>
                       <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                         <div
@@ -155,7 +160,7 @@ export function BreastTumorClassification() {
                   </div>
 
                   <div className="border rounded-lg p-4 mt-4">
-                    <div className="text-sm font-medium text-muted-foreground mb-2">Key Findings</div>
+                    <div className="text-sm font-medium text-muted-foreground mb-2">Hallazgos Clave</div>
                     <ul className="mt-1 space-y-1 list-disc pl-5">
                       {mockPredictions[0].results.findings.map((finding, index) => (
                         <li key={index} className="text-sm md:text-base">
@@ -172,7 +177,7 @@ export function BreastTumorClassification() {
                     className="ml-auto"
                     onClick={() => handleViewReport(mockPredictions[0])}
                   >
-                    <span className="hidden sm:inline mr-1">View</span> Full Report
+                    <span className="hidden sm:inline mr-1">Ver</span> Informe Completo
                   </Button>
                 </CardFooter>
               </Card>
@@ -189,7 +194,7 @@ export function BreastTumorClassification() {
             </div>
           ) : (
             <div className="text-center p-8">
-              <p className="text-muted-foreground">No classification results available yet.</p>
+              <p className="text-muted-foreground">No hay resultados de clasificación disponibles aún.</p>
             </div>
           )}
         </TabsContent>
@@ -199,9 +204,9 @@ export function BreastTumorClassification() {
               <Card key={prediction.id} className="overflow-hidden">
                 <CardHeader className="pb-2 flex flex-col sm:flex-row justify-between">
                   <div>
-                    <CardTitle className="text-base">Classification #{prediction.id}</CardTitle>
+                    <CardTitle className="text-base">Clasificación #{prediction.id}</CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                      Model: {prediction.model} | Image ID: {prediction.imageId}
+                      Modelo: {prediction.model} | ID de Imagen: {prediction.imageId}
                     </CardDescription>
                   </div>
                   <Badge variant="outline" className="self-start sm:self-center mt-2 sm:mt-0">
@@ -220,9 +225,11 @@ export function BreastTumorClassification() {
                           prediction.results.primaryClass === "benign" ? "bg-amber-500" : "bg-red-500"
                         }`}
                       ></div>
-                      <div className="text-base sm:text-lg font-bold capitalize">{prediction.results.primaryClass}</div>
+                      <div className="text-base sm:text-lg font-bold capitalize">
+                        {translatePrimaryClass(prediction.results.primaryClass)}
+                      </div>
                       <div className="text-xs sm:text-sm text-muted-foreground ml-auto">
-                        Confidence: {(prediction.results.confidence * 100).toFixed(1)}%
+                        Confianza: {(prediction.results.confidence * 100).toFixed(1)}%
                       </div>
                     </div>
                     <p className="text-xs sm:text-sm">{prediction.results.additionalDetails}</p>
@@ -233,7 +240,7 @@ export function BreastTumorClassification() {
                         className="h-8 px-2"
                         onClick={() => handleViewDetails(prediction)}
                       >
-                        View Details
+                        Ver Detalles
                       </Button>
                     </div>
                   </div>
@@ -244,19 +251,19 @@ export function BreastTumorClassification() {
         </TabsContent>
       </Tabs>
 
-      {/* Full Report Modal */}
+      {/* Modal de Informe Completo */}
       <Dialog open={isReportOpen} onOpenChange={setIsReportOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Full Classification Report</DialogTitle>
+            <DialogTitle>Informe de Clasificación Completo</DialogTitle>
             <DialogDescription>
               {selectedPrediction && (
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-1">
-                  <span>Date: {selectedPrediction.date}</span>
+                  <span>Fecha: {selectedPrediction.date}</span>
                   <span className="hidden sm:inline">•</span>
-                  <span>Model: {selectedPrediction.model}</span>
+                  <span>Modelo: {selectedPrediction.model}</span>
                   <span className="hidden sm:inline">•</span>
-                  <span>Confidence: {(selectedPrediction.results.confidence * 100).toFixed(1)}%</span>
+                  <span>Confianza: {(selectedPrediction.results.confidence * 100).toFixed(1)}%</span>
                 </div>
               )}
             </DialogDescription>
@@ -267,28 +274,30 @@ export function BreastTumorClassification() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Classification Results</CardTitle>
+                    <CardTitle className="text-base">Resultados de Clasificación</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="font-medium flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                          Benign:
+                          Benigno:
                         </span>
                         <span>{(selectedPrediction.results.classification.benign * 100).toFixed(1)}%</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="font-medium flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                          Malignant:
+                          Maligno:
                         </span>
                         <span>{(selectedPrediction.results.classification.malignant * 100).toFixed(1)}%</span>
                       </div>
                       <div className="pt-2 mt-2 border-t">
                         <div className="flex justify-between items-center">
-                          <span className="font-medium">Primary Classification:</span>
-                          <span className="capitalize font-bold">{selectedPrediction.results.primaryClass}</span>
+                          <span className="font-medium">Clasificación Primaria:</span>
+                          <span className="capitalize font-bold">
+                            {translatePrimaryClass(selectedPrediction.results.primaryClass)}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -297,7 +306,7 @@ export function BreastTumorClassification() {
 
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Key Findings</CardTitle>
+                    <CardTitle className="text-base">Hallazgos Clave</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ul className="list-disc pl-5 space-y-1">
@@ -313,7 +322,7 @@ export function BreastTumorClassification() {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Detailed Analysis</CardTitle>
+                  <CardTitle className="text-base">Análisis Detallado</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm">{selectedPrediction.results.additionalDetails}</p>
@@ -334,27 +343,27 @@ export function BreastTumorClassification() {
 
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={() => setIsReportOpen(false)} className="w-full sm:w-auto">
-              Close
+              Cerrar
             </Button>
             <Button className="gap-2 w-full sm:w-auto">
               <Download className="h-4 w-4" />
-              Download PDF
+              Descargar PDF
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* View Details Modal */}
+      {/* Modal de Ver Detalles */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Classification Details</DialogTitle>
+            <DialogTitle>Detalles de Clasificación</DialogTitle>
             <DialogDescription>
               {selectedPrediction && (
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-1">
-                  <span>Date: {selectedPrediction.date}</span>
+                  <span>Fecha: {selectedPrediction.date}</span>
                   <span className="hidden sm:inline">•</span>
-                  <span>Model: {selectedPrediction.model}</span>
+                  <span>Modelo: {selectedPrediction.model}</span>
                 </div>
               )}
             </DialogDescription>
@@ -364,19 +373,19 @@ export function BreastTumorClassification() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-2">
                 <div className="border rounded-md p-3">
-                  <div className="text-sm font-medium text-muted-foreground">Classification</div>
+                  <div className="text-sm font-medium text-muted-foreground">Clasificación</div>
                   <div className="text-lg sm:text-xl font-bold capitalize">
-                    {selectedPrediction.results.primaryClass}
+                    {translatePrimaryClass(selectedPrediction.results.primaryClass)}
                   </div>
                 </div>
                 <div className="border rounded-md p-3">
-                  <div className="text-sm font-medium text-muted-foreground">Risk Score</div>
+                  <div className="text-sm font-medium text-muted-foreground">Nivel de Riesgo</div>
                   <div className="text-lg sm:text-xl font-bold">{selectedPrediction.results.riskScore}/100</div>
                 </div>
               </div>
 
               <div className="border rounded-md p-3">
-                <div className="text-sm font-medium text-muted-foreground">Confidence Score</div>
+                <div className="text-sm font-medium text-muted-foreground">Puntuación de Confianza</div>
                 <div className="text-lg sm:text-xl font-bold">
                   {(selectedPrediction.results.confidence * 100).toFixed(1)}%
                 </div>
@@ -389,7 +398,7 @@ export function BreastTumorClassification() {
               </div>
 
               <div className="border rounded-md p-3">
-                <div className="text-sm font-medium text-muted-foreground">Findings</div>
+                <div className="text-sm font-medium text-muted-foreground">Hallazgos</div>
                 <ul className="mt-1 space-y-1 list-disc pl-5">
                   {selectedPrediction.results.findings.map((finding, index) => (
                     <li key={index} className="text-sm">
@@ -400,7 +409,7 @@ export function BreastTumorClassification() {
               </div>
 
               <div className="border rounded-md p-3">
-                <div className="text-sm font-medium text-muted-foreground">Additional Details</div>
+                <div className="text-sm font-medium text-muted-foreground">Detalles Adicionales</div>
                 <p className="mt-1 text-sm">{selectedPrediction.results.additionalDetails}</p>
               </div>
             </div>
@@ -408,7 +417,7 @@ export function BreastTumorClassification() {
 
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={() => setIsDetailsOpen(false)} className="w-full sm:w-auto">
-              Close
+              Cerrar
             </Button>
             <Button
               variant="default"
@@ -419,7 +428,7 @@ export function BreastTumorClassification() {
               }}
             >
               <FileText className="h-4 w-4" />
-              View Full Report
+              Ver Informe Completo
             </Button>
           </DialogFooter>
         </DialogContent>

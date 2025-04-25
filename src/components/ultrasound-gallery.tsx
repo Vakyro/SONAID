@@ -17,27 +17,27 @@ import { Download, Expand, Trash2 } from "lucide-react"
 import { UltrasoundUploader } from "@/components/ultrasound-uploader"
 import { ImageValidator } from "@/components/image-validator"
 
-// Mock breast ultrasound/mammogram images
+// Imágenes simuladas de ultrasonido/mamografía mamaria
 const breastImages = [
   {
     id: "1",
-    title: "Right Breast Ultrasound",
-    date: "April 14, 2025",
-    description: "Transverse view of right breast mass",
+    title: "Ultrasonido de Mama Derecha",
+    date: "14 de abril, 2025",
+    description: "Vista transversal de masa en mama derecha",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
   {
     id: "2",
-    title: "Left Breast Ultrasound",
-    date: "April 14, 2025",
-    description: "Longitudinal view of left breast",
+    title: "Ultrasonido de Mama Izquierda",
+    date: "14 de abril, 2025",
+    description: "Vista longitudinal de mama izquierda",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
   {
     id: "3",
-    title: "Mammogram - Right CC View",
-    date: "April 10, 2025",
-    description: "Craniocaudal view of right breast",
+    title: "Mamografía - Vista CC Derecha",
+    date: "10 de abril, 2025",
+    description: "Vista craneocaudal de mama derecha",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
 ]
@@ -54,8 +54,8 @@ export function UltrasoundGallery() {
     <div className="grid gap-4">
       <Tabs defaultValue="gallery">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="gallery">Gallery View</TabsTrigger>
-          <TabsTrigger value="upload">Upload New</TabsTrigger>
+          <TabsTrigger value="gallery">Vista de Galería</TabsTrigger>
+          <TabsTrigger value="upload">Subir Nueva</TabsTrigger>
         </TabsList>
         <TabsContent value="gallery" className="mt-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -93,11 +93,11 @@ export function UltrasoundGallery() {
                         <div className="flex flex-col sm:flex-row justify-end gap-2">
                           <Button variant="outline" size="sm" className="w-full sm:w-auto">
                             <Download className="h-4 w-4 mr-2" />
-                            Download
+                            Descargar
                           </Button>
                           <Button variant="destructive" size="sm" className="w-full sm:w-auto mt-2 sm:mt-0">
                             <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
+                            Eliminar
                           </Button>
                         </div>
                       </DialogContent>

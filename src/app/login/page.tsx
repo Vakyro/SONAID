@@ -12,36 +12,34 @@ export default function LoginPage() {
             <SonaidLogo size={32} />
             <h1 className="text-3xl font-bold tracking-tighter">SONAID</h1>
           </div>
-          <p className="text-gray-500 dark:text-gray-400">Ultrasound-based patient case management system</p>
+          <p className="text-gray-500 dark:text-gray-400">Sistema de gestión de casos de pacientes con ultrasonido</p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
-            <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
+            <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
+            <CardDescription className="text-center">Ingrese sus credenciales para acceder a su cuenta</CardDescription>
           </CardHeader>
           <CardContent>
             <LoginForm />
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-center text-gray-500">
-              Don&apos;t have an account? Contact your administrator
-            </div>
+            <div className="text-sm text-center text-gray-500">¿No tiene una cuenta? Contacte a su administrador</div>
             <div className="text-xs text-center text-gray-500">
-              By signing in, you agree to our{" "}
+              Al iniciar sesión, acepta nuestros{" "}
               <Link href="#" className="underline hover:text-gray-900">
-                Terms of Service
+                Términos de Servicio
               </Link>{" "}
-              and{" "}
+              y{" "}
               <Link href="#" className="underline hover:text-gray-900">
-                Privacy Policy
+                Política de Privacidad
               </Link>
             </div>
           </CardFooter>
         </Card>
 
         <div className="text-center text-sm text-gray-500">
-          &copy; 2025 SONAID Medical Systems. All rights reserved.
+          &copy; 2025 SONAID Medical Systems. Todos los derechos reservados.
         </div>
       </div>
     </div>

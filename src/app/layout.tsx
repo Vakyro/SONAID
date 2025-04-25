@@ -20,20 +20,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ViewTransitions>
-      <html lang="en">
-        <head>
-          <link rel="manifest" href="/manifest.json" />
-        </head>
-        <body className={inter.className}>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-            <UserProvider>
-              {children}
-              <Toaster />
-            </UserProvider>
-          </ThemeProvider>
-        </body>
-      </html>
-    </ViewTransitions>
+  <ViewTransitions>
+    <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <UserProvider>
+            {children}
+            <Toaster />
+          </UserProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  </ViewTransitions>
   )
 }

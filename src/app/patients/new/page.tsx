@@ -20,7 +20,7 @@ export default function NewPatientPage() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-semibold">Create New SONAID Case</h1>
+          <h1 className="text-2xl font-semibold">Crear Nuevo Caso SONAID</h1>
         </div>
         <div className="mx-auto w-full max-w-3xl">
           <NewPatientForm />

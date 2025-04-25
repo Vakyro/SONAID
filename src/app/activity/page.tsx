@@ -22,20 +22,44 @@ export default function ActivityPage() {
   }, [currentUser, isLoading, router])
 
   if (isLoading || !currentUser) {
-    return <div className="flex min-h-screen items-center justify-center">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center">Cargando...</div>
   }
 
   // Mock activity data
   const activityData = [
-    { id: 1, action: "Created new patient case", patient: "John Smith", date: "April 15, 2025", time: "10:23 AM" },
-    { id: 2, action: "Uploaded ultrasound image", patient: "Emily Johnson", date: "April 14, 2025", time: "2:45 PM" },
-    { id: 3, action: "Updated patient information", patient: "Michael Brown", date: "April 12, 2025", time: "9:30 AM" },
-    { id: 4, action: "Shared case with Dr. Chen", patient: "Sarah Davis", date: "April 10, 2025", time: "11:15 AM" },
+    {
+      id: 1,
+      action: "Creó nuevo caso de paciente",
+      patient: "John Smith",
+      date: "15 de abril, 2025",
+      time: "10:23 AM",
+    },
+    {
+      id: 2,
+      action: "Subió imagen de ultrasonido",
+      patient: "Emily Johnson",
+      date: "14 de abril, 2025",
+      time: "2:45 PM",
+    },
+    {
+      id: 3,
+      action: "Actualizó información del paciente",
+      patient: "Michael Brown",
+      date: "12 de abril, 2025",
+      time: "9:30 AM",
+    },
+    {
+      id: 4,
+      action: "Compartió caso con Dr. Chen",
+      patient: "Sarah Davis",
+      date: "10 de abril, 2025",
+      time: "11:15 AM",
+    },
     {
       id: 5,
-      action: "Viewed ML prediction results",
+      action: "Visualizó resultados de predicción ML",
       patient: "Robert Williams",
-      date: "April 8, 2025",
+      date: "8 de abril, 2025",
       time: "3:20 PM",
     },
   ]
@@ -58,13 +82,13 @@ export default function ActivityPage() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-semibold">Activity History</h1>
+          <h1 className="text-2xl font-semibold">Historial de Actividad</h1>
         </div>
 
         <Card className="max-w-4xl mx-auto w-full">
           <CardHeader>
-            <CardTitle>Activity History</CardTitle>
-            <CardDescription>Your recent actions in the SONAID system</CardDescription>
+            <CardTitle>Historial de Actividad</CardTitle>
+            <CardDescription>Sus acciones recientes en el sistema SONAID</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
@@ -82,7 +106,7 @@ export default function ActivityPage() {
                       <p className="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">{activity.patient}</p>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {activity.date} at {activity.time}
+                      {activity.date} a las {activity.time}
                     </p>
                   </div>
                 </div>

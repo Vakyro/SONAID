@@ -13,43 +13,43 @@ interface ClinicalRecommendationsProps {
 export function ClinicalRecommendations({
   classification,
   confidence,
-  title = "Clinical Recommendations",
-  description = "Suggested next steps based on classification results",
+  title = "Recomendaciones Clínicas",
+  description = "Pasos siguientes sugeridos basados en resultados de clasificación",
 }: ClinicalRecommendationsProps) {
-  // Define recommendations based on classification
+  // Definir recomendaciones basadas en la clasificación
   const getRecommendations = () => {
     switch (classification) {
       case "benign":
         return {
           icon: <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500" />,
-          title: "Short-term Follow-up",
+          title: "Seguimiento a Corto Plazo",
           recommendations: [
-            "Follow-up imaging in 6 months to monitor stability",
-            "Consider additional diagnostic imaging (e.g., MRI) if clinically indicated",
-            "Maintain breast self-awareness and report any changes",
-            "Clinical breast examination in 3 months",
+            "Imágenes de seguimiento en 6 meses para monitorear estabilidad",
+            "Considerar imágenes diagnósticas adicionales (p. ej., RM) si está clínicamente indicado",
+            "Mantener autoconciencia mamaria e informar cualquier cambio",
+            "Examen clínico de mama en 3 meses",
           ],
         }
       case "malignant":
         return {
           icon: <AlertCircle className="h-6 w-6 sm:h-8 sm:w-8 text-red-500" />,
-          title: "Recommended Biopsy",
+          title: "Biopsia Recomendada",
           recommendations: [
-            "Immediate referral to breast surgeon or oncologist",
-            "Core needle biopsy or fine needle aspiration recommended",
-            "Additional imaging studies (MRI, CT) to assess extent of disease",
-            "Genetic counseling and testing if appropriate",
-            "Multidisciplinary tumor board review recommended",
+            "Derivación inmediata a cirujano de mama u oncólogo",
+            "Se recomienda biopsia con aguja gruesa o aspiración con aguja fina",
+            "Estudios de imagen adicionales (RM, TC) para evaluar extensión de la enfermedad",
+            "Asesoramiento genético y pruebas si es apropiado",
+            "Se recomienda revisión por junta multidisciplinaria de tumores",
           ],
         }
       default:
         return {
           icon: <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-gray-500" />,
-          title: "Indeterminate",
+          title: "Indeterminado",
           recommendations: [
-            "Additional imaging recommended",
-            "Clinical correlation advised",
-            "Consider second opinion review",
+            "Se recomienda imágenes adicionales",
+            "Se aconseja correlación clínica",
+            "Considerar segunda opinión",
           ],
         }
     }
@@ -57,10 +57,10 @@ export function ClinicalRecommendations({
 
   const { icon, title: recommendationTitle, recommendations } = getRecommendations()
 
-  // Add confidence-based qualifier
+  // Añadir nota basada en la confianza
   let confidenceNote = ""
   if (confidence < 0.7) {
-    confidenceNote = "Note: Classification confidence is low. Clinical correlation is strongly advised."
+    confidenceNote = "Nota: La confianza de clasificación es baja. Se recomienda encarecidamente correlación clínica."
   }
 
   return (

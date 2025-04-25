@@ -52,7 +52,7 @@ export default function ProfilePage() {
   }, [currentUser, isLoading, router])
 
   if (isLoading || !currentUser) {
-    return <div className="flex min-h-screen items-center justify-center">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center">Cargando...</div>
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -101,7 +101,7 @@ export default function ProfilePage() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-semibold">My Profile</h1>
+          <h1 className="text-2xl font-semibold">Mi Perfil</h1>
         </div>
 
         <div className="grid gap-6 md:grid-cols-[1fr_2fr] max-w-6xl mx-auto w-full">
@@ -118,7 +118,7 @@ export default function ProfilePage() {
                   {isEditing && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                       <Button variant="ghost" size="sm" className="text-white">
-                        Change
+                        Cambiar
                       </Button>
                     </div>
                   )}
@@ -132,22 +132,22 @@ export default function ProfilePage() {
                     <>
                       <Button variant="outline" className="w-full" onClick={() => setIsEditing(true)}>
                         <Edit className="mr-2 h-4 w-4" />
-                        Edit Profile
+                        Editar Perfil
                       </Button>
                       <Button variant="outline" className="w-full" onClick={() => router.push("/activity")}>
                         <FileText className="mr-2 h-4 w-4" />
-                        View Activity
+                        Ver Actividad
                       </Button>
                     </>
                   ) : (
                     <div className="flex gap-2">
                       <Button variant="outline" className="w-full" onClick={handleCancel}>
                         <X className="mr-2 h-4 w-4" />
-                        Cancel
+                        Cancelar
                       </Button>
                       <Button className="w-full" onClick={handleSave}>
                         <Save className="mr-2 h-4 w-4" />
-                        Save
+                        Guardar
                       </Button>
                     </div>
                   )}
@@ -159,18 +159,18 @@ export default function ProfilePage() {
           <div className="grid gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Professional Information</CardTitle>
-                <CardDescription>Your professional details and contact information</CardDescription>
+                <CardTitle>Información Profesional</CardTitle>
+                <CardDescription>Sus datos profesionales e información de contacto</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
                 {isEditing ? (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
+                      <Label htmlFor="name">Nombre Completo</Label>
                       <Input id="name" name="name" value={profileData.name} onChange={handleInputChange} />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="specialty">Specialty</Label>
+                      <Label htmlFor="specialty">Especialidad</Label>
                       <Input
                         id="specialty"
                         name="specialty"
@@ -183,7 +183,7 @@ export default function ProfilePage() {
                       <Input id="hospital" name="hospital" value={profileData.hospital} onChange={handleInputChange} />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="department">Department</Label>
+                      <Label htmlFor="department">Departamento</Label>
                       <Input
                         id="department"
                         name="department"
@@ -192,15 +192,15 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">Correo Electrónico</Label>
                       <Input id="email" name="email" value={profileData.email} onChange={handleInputChange} />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
+                      <Label htmlFor="phone">Teléfono</Label>
                       <Input id="phone" name="phone" value={profileData.phone} onChange={handleInputChange} />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="yearsOfExperience">Years of Experience</Label>
+                      <Label htmlFor="yearsOfExperience">Años de Experiencia</Label>
                       <Input
                         id="yearsOfExperience"
                         name="yearsOfExperience"
@@ -222,29 +222,29 @@ export default function ProfilePage() {
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-sm font-medium">Department</p>
+                        <p className="text-sm font-medium">Departamento</p>
                         <p className="text-sm text-muted-foreground">{profileData.department}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-sm font-medium">Email</p>
+                        <p className="text-sm font-medium">Correo Electrónico</p>
                         <p className="text-sm text-muted-foreground">{profileData.email}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-sm font-medium">Phone</p>
+                        <p className="text-sm font-medium">Teléfono</p>
                         <p className="text-sm text-muted-foreground">{profileData.phone}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-sm font-medium">Experience</p>
-                        <p className="text-sm text-muted-foreground">{profileData.yearsOfExperience} years</p>
+                        <p className="text-sm font-medium">Experiencia</p>
+                        <p className="text-sm text-muted-foreground">{profileData.yearsOfExperience} años</p>
                       </div>
                     </div>
                   </div>
@@ -254,13 +254,13 @@ export default function ProfilePage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>About</CardTitle>
-                <CardDescription>Professional biography and expertise</CardDescription>
+                <CardTitle>Acerca de</CardTitle>
+                <CardDescription>Biografía profesional y experiencia</CardDescription>
               </CardHeader>
               <CardContent>
                 {isEditing ? (
                   <div className="space-y-2">
-                    <Label htmlFor="bio">Professional Biography</Label>
+                    <Label htmlFor="bio">Biografía Profesional</Label>
                     <Textarea id="bio" name="bio" rows={4} value={profileData.bio} onChange={handleInputChange} />
                   </div>
                 ) : (
@@ -271,26 +271,26 @@ export default function ProfilePage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Statistics</CardTitle>
-                <CardDescription>Your activity on SONAID</CardDescription>
+                <CardTitle>Estadísticas</CardTitle>
+                <CardDescription>Su actividad en SONAID</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                   <div className="flex flex-col items-center justify-center rounded-lg border p-4">
                     <span className="text-2xl font-bold">24</span>
-                    <span className="text-xs text-muted-foreground">Total Cases</span>
+                    <span className="text-xs text-muted-foreground">Total de Casos</span>
                   </div>
                   <div className="flex flex-col items-center justify-center rounded-lg border p-4">
                     <span className="text-2xl font-bold">12</span>
-                    <span className="text-xs text-muted-foreground">Shared Cases</span>
+                    <span className="text-xs text-muted-foreground">Casos Compartidos</span>
                   </div>
                   <div className="flex flex-col items-center justify-center rounded-lg border p-4">
                     <span className="text-2xl font-bold">8</span>
-                    <span className="text-xs text-muted-foreground">This Week</span>
+                    <span className="text-xs text-muted-foreground">Esta Semana</span>
                   </div>
                   <div className="flex flex-col items-center justify-center rounded-lg border p-4">
                     <span className="text-2xl font-bold">156</span>
-                    <span className="text-xs text-muted-foreground">Ultrasounds</span>
+                    <span className="text-xs text-muted-foreground">Ultrasonidos</span>
                   </div>
                 </div>
               </CardContent>

@@ -22,7 +22,7 @@ export default function SharedCasesPage() {
   }, [currentUser, isLoading, router])
 
   if (isLoading || !currentUser) {
-    return <div className="flex min-h-screen items-center justify-center">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center">Cargando...</div>
   }
 
   return (
@@ -43,10 +43,10 @@ export default function SharedCasesPage() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-semibold">Cases Shared With Me</h1>
+          <h1 className="text-2xl font-semibold">Casos Compartidos Conmigo</h1>
         </div>
         <p className="text-muted-foreground">
-          View and manage patient cases that have been shared with you by other doctors.
+          Ver y gestionar casos de pacientes que han sido compartidos contigo por otros médicos.
         </p>
         <SharedCasesList />
       </main>

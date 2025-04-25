@@ -71,28 +71,28 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
     setIsValidating(true)
     setValidationResult(null)
 
-    // Check file type
+    // Verificar tipo de archivo
     const validTypes = ["image/jpeg", "image/png", "image/dicom", "application/dicom"]
     if (!validTypes.includes(imageFile.type)) {
       setIsValidating(false)
       setValidationResult({
         isValid: false,
-        message: "Invalid file type. Please upload a JPEG, PNG, or DICOM image.",
+        message: "Tipo de archivo inválido. Por favor, suba una imagen JPEG, PNG o DICOM.",
       })
       return
     }
 
-    // Simulate ML-based validation (in a real app, this would call an API)
+    // Simular validación basada en ML (en una aplicación real, esto llamaría a una API)
     setTimeout(() => {
-      // Mock validation - in a real app, this would be an actual ML model check
-      const mockValidation = Math.random() > 0.2 // 80% chance of success for demo purposes
+      // Validación simulada - en una aplicación real, esto sería una verificación de modelo ML real
+      const mockValidation = Math.random() > 0.2 // 80% de probabilidad de éxito para fines de demostración
 
       setIsValidating(false)
       setValidationResult({
         isValid: mockValidation,
         message: mockValidation
-          ? "Image validated successfully. This appears to be a valid breast ultrasound/mammogram image."
-          : "This image does not appear to be a breast ultrasound or mammogram. Please upload a valid image.",
+          ? "Imagen validada con éxito. Esta parece ser una imagen válida de ultrasonido/mamografía de mama."
+          : "Esta imagen no parece ser un ultrasonido o mamografía de mama. Por favor, suba una imagen válida.",
       })
 
       if (mockValidation && file) {
@@ -104,8 +104,10 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Image Validation</CardTitle>
-        <CardDescription>Upload a breast ultrasound or mammogram image for validation before analysis</CardDescription>
+        <CardTitle>Validación de Imagen</CardTitle>
+        <CardDescription>
+          Suba una imagen de ultrasonido o mamografía de mama para validación antes del análisis
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {!file ? (
@@ -117,9 +119,9 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
           >
             <Upload className="h-8 w-8 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
-              Drag and drop your breast ultrasound or mammogram image here
+              Arrastre y suelte su imagen de ultrasonido o mamografía de mama aquí
             </p>
-            <p className="text-xs text-muted-foreground">Supported formats: JPEG, PNG, DICOM</p>
+            <p className="text-xs text-muted-foreground">Formatos soportados: JPEG, PNG, DICOM</p>
             <input
               type="file"
               accept="image/jpeg,image/png,application/dicom"
@@ -136,14 +138,19 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
                 handleBrowseClick()
               }}
             >
-              Browse Files
+              Explorar Archivos
             </Button>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="relative aspect-video w-full max-h-[300px] overflow-hidden rounded-lg border">
               {preview && (
-                <Image src={preview || "/placeholder.svg"} alt="Image preview" fill className="object-contain" />
+                <Image
+                  src={preview || "/placeholder.svg"}
+                  alt="Vista previa de imagen"
+                  fill
+                  className="object-contain"
+                />
               )}
               <Button
                 variant="ghost"
@@ -158,12 +165,12 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
             {isValidating ? (
               <div className="flex items-center justify-center p-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span className="ml-2">Validating image...</span>
+                <span className="ml-2">Validando imagen...</span>
               </div>
             ) : validationResult ? (
               <Alert variant={validationResult.isValid ? "default" : "destructive"}>
                 {validationResult.isValid ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
-                <AlertTitle>{validationResult.isValid ? "Validation Successful" : "Validation Failed"}</AlertTitle>
+                <AlertTitle>{validationResult.isValid ? "Validación Exitosa" : "Validación Fallida"}</AlertTitle>
                 <AlertDescription>{validationResult.message}</AlertDescription>
               </Alert>
             ) : null}
@@ -173,10 +180,10 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
       <CardFooter className="flex justify-between">
         {file && (
           <Button variant="outline" onClick={resetFile}>
-            Reset
+            Reiniciar
           </Button>
         )}
-        {file && validationResult?.isValid && <Button>Proceed to Analysis</Button>}
+        {file && validationResult?.isValid && <Button>Proceder al Análisis</Button>}
       </CardFooter>
     </Card>
   )

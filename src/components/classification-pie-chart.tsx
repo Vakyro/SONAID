@@ -16,12 +16,12 @@ interface ClassificationPieChartProps {
 
 export function ClassificationPieChart({
   data,
-  title = "Classification Results",
-  description = "Probability distribution of breast tumor classification",
+  title = "Resultados de Clasificación",
+  description = "Distribución de probabilidad de clasificación de tumor mamario",
 }: ClassificationPieChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  // Calculate total to get percentages
+  // Calcular total para obtener porcentajes
   const total = data.benign + data.malignant
   const benignPercent = Math.round((data.benign / total) * 100)
   const malignantPercent = Math.round((data.malignant / total) * 100)
@@ -33,7 +33,7 @@ export function ClassificationPieChart({
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Make canvas responsive
+    // Hacer el canvas responsivo
     const resizeCanvas = () => {
       const parent = canvas.parentElement
       if (!parent) return
@@ -46,21 +46,21 @@ export function ClassificationPieChart({
     }
 
     const drawChart = () => {
-      // Clear canvas
+      // Limpiar canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Set up pie chart
+      // Configurar gráfico circular
       const centerX = canvas.width / 2
       const centerY = canvas.height / 2
       const radius = Math.min(centerX, centerY) - 10
 
-      // Define colors
+      // Definir colores
       const colors = {
-        benign: "#f59e0b", // Amber
-        malignant: "#ef4444", // Red
+        benign: "#f59e0b", // Ámbar
+        malignant: "#ef4444", // Rojo
       }
 
-      // Draw pie chart
+      // Dibujar gráfico circular
       let startAngle = 0
       const drawSegment = (value: number, color: string, label: string) => {
         const segmentAngle = (value / total) * 2 * Math.PI
@@ -73,7 +73,7 @@ export function ClassificationPieChart({
         ctx.fillStyle = color
         ctx.fill()
 
-        // Add label
+        // Añadir etiqueta
         const midAngle = startAngle + segmentAngle / 2
         const labelRadius = radius * 0.7
         const labelX = centerX + labelRadius * Math.cos(midAngle)
@@ -88,15 +88,15 @@ export function ClassificationPieChart({
         startAngle += segmentAngle
       }
 
-      // Draw segments
+      // Dibujar segmentos
       drawSegment(data.benign, colors.benign, `${benignPercent}%`)
       drawSegment(data.malignant, colors.malignant, `${malignantPercent}%`)
     }
 
-    // Initial draw
+    // Dibujo inicial
     resizeCanvas()
 
-    // Redraw on window resize
+    // Redibujar al cambiar el tamaño de la ventana
     window.addEventListener("resize", resizeCanvas)
 
     return () => {
@@ -118,11 +118,11 @@ export function ClassificationPieChart({
           <div className="flex justify-center gap-4 mt-4 flex-wrap">
             <div className="flex items-center">
               <div className="w-4 h-4 bg-amber-500 rounded-full mr-2"></div>
-              <span className="text-sm">Benign ({benignPercent}%)</span>
+              <span className="text-sm">Benigno ({benignPercent}%)</span>
             </div>
             <div className="flex items-center">
               <div className="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
-              <span className="text-sm">Malignant ({malignantPercent}%)</span>
+              <span className="text-sm">Maligno ({malignantPercent}%)</span>
             </div>
           </div>
         </div>

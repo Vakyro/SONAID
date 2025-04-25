@@ -57,20 +57,20 @@ export function LoginForm() {
     const newErrors = { ...errors }
 
     if (!formData.email) {
-      newErrors.email = "Email is required"
+      newErrors.email = "El correo electrónico es obligatorio"
       valid = false
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid"
+      newErrors.email = "El correo electrónico no es válido"
       valid = false
     } else {
       newErrors.email = ""
     }
 
     if (!formData.password) {
-      newErrors.password = "Password is required"
+      newErrors.password = "La contraseña es obligatoria"
       valid = false
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters"
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres"
       valid = false
     } else {
       newErrors.password = ""
@@ -96,15 +96,15 @@ export function LoginForm() {
         router.push("/") // Redirect to dashboard on successful login
       } else {
         toast({
-          title: "Login failed",
-          description: "Invalid email or password. Please try again.",
+          title: "Error de inicio de sesión",
+          description: "Correo electrónico o contraseña inválidos. Por favor, inténtelo de nuevo.",
           variant: "destructive",
         })
       }
     } catch (error) {
       toast({
-        title: "Login error",
-        description: "An error occurred during login. Please try again.",
+        title: "Error de inicio de sesión",
+        description: "Ocurrió un error durante el inicio de sesión. Por favor, inténtelo de nuevo.",
         variant: "destructive",
       })
     } finally {
@@ -115,7 +115,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">Correo Electrónico</Label>
         <Input
           id="email"
           name="email"
@@ -129,9 +129,9 @@ export function LoginForm() {
       </div>
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Contraseña</Label>
           <Link href="/forgot-password" className="text-xs text-primary hover:underline">
-            Forgot password?
+            ¿Olvidó su contraseña?
           </Link>
         </div>
         <div className="relative">
@@ -157,7 +157,7 @@ export function LoginForm() {
             ) : (
               <EyeIcon className="h-4 w-4 text-gray-500" />
             )}
-            <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+            <span className="sr-only">{showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
           </Button>
         </div>
         {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
@@ -170,17 +170,17 @@ export function LoginForm() {
           disabled={isLoading}
         />
         <Label htmlFor="remember" className="text-sm font-normal">
-          Remember me for 30 days
+          Recordarme por 30 días
         </Label>
       </div>
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Signing in...
+            Iniciando sesión...
           </>
         ) : (
-          "Sign in"
+          "Iniciar Sesión"
         )}
       </Button>
     </form>
