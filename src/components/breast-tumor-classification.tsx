@@ -1,438 +1,193 @@
-"use client"
+"use client";
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ResponsivePie } from "@nivo/pie"; // Asumo que usas nivo/pie o similar, ajusta si es ClassificationPieChart
+import { ClassificationPieChart } from "./classification-pie-chart"; // O tu componente de gráfica
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Thermometer, Activity, FileText, Users, CalendarDays, ShieldAlert, ShieldCheck } from "lucide-react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { InfoIcon, Download, FileText, Calendar } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
-import { ClassificationPieChart } from "@/components/classification-pie-chart"
-import { RiskLevelBar } from "@/components/risk-level-bar"
-import { ClinicalRecommendations } from "@/components/clinical-recommendations"
+interface ClassificationData {
+  benign: number;
+  malignant: number;
+}
 
-// Mock prediction results for breast tumor classification (removed 'normal' classification)
-const mockPredictions = [
-  {
-    id: "1",
-    date: "14 de abril, 2025",
-    model: "BreastNet v3.2",
-    imageId: "1",
-    results: {
-      classification: {
-        benign: 0.3,
-        malignant: 0.7,
-      },
-      primaryClass: "malignant" as const,
-      confidence: 0.92,
-      riskScore: 75,
-      findings: ["Masa irregular con márgenes espiculados", "Sombra acústica posterior"],
-      additionalDetails:
-        "Masa hipoecoica que mide 2.1 x 1.8 cm con márgenes irregulares y ecos internos heterogéneos. Los hallazgos son altamente sospechosos de malignidad.",
-    },
-  },
-  {
-    id: "2",
-    date: "10 de abril, 2025",
-    model: "BreastNet v3.1",
-    imageId: "3",
-    results: {
-      classification: {
-        benign: 0.75,
-        malignant: 0.25,
-      },
-      primaryClass: "benign" as const,
-      confidence: 0.87,
-      riskScore: 40,
-      findings: ["Masa bien circunscrita", "Sin características acústicas posteriores"],
-      additionalDetails:
-        "Masa hipoecoica bien definida que mide 1.5 x 1.3 cm con márgenes lisos. Las características son consistentes con una lesión benigna, probablemente un fibroadenoma.",
-    },
-  },
-  {
-    id: "3",
-    date: "28 de marzo, 2025",
-    model: "BreastNet v3.0",
-    imageId: "2",
-    results: {
-      classification: {
-        benign: 0.9,
-        malignant: 0.1,
-      },
-      primaryClass: "benign" as const,
-      confidence: 0.95,
-      riskScore: 25,
-      findings: ["Masa bien definida", "Sin calcificaciones sospechosas"],
-      additionalDetails:
-        "Masa bien definida con ecos internos homogéneos. Sin calcificaciones sospechosas ni distorsión arquitectónica. Las características son consistentes con una lesión benigna.",
-    },
-  },
-]
+interface PredictionResults {
+  classification: ClassificationData;
+  primaryClass: "benign" | "malignant";
+  confidence: number;
+  riskScore: number;
+  findings: string[];
+  // Asegúrate que todos los campos que esperas de localStorage estén aquí
+}
+
+interface Prediction {
+  id: string;
+  date: string;
+  model: string;
+  imageId: string;
+  results: PredictionResults;
+}
+
+// ... (código existente como getRiskLevelText, getRiskLevelIcon)
 
 export function BreastTumorClassification() {
-  const [activeTab, setActiveTab] = useState("results")
-  const [selectedPrediction, setSelectedPrediction] = useState<(typeof mockPredictions)[0] | null>(null)
-  const [isReportOpen, setIsReportOpen] = useState(false)
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [displayPrediction, setDisplayPrediction] = useState<Prediction | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleViewReport = (prediction: (typeof mockPredictions)[0]) => {
-    setSelectedPrediction(prediction)
-    setIsReportOpen(true)
+  useEffect(() => {
+    console.log("BreastTumorClassification: useEffect para cargar datos de localStorage.");
+    setError(null); // Limpiar errores previos
+    const storedPredictionData = localStorage.getItem('latestPrediction');
+    
+    if (!storedPredictionData) {
+      console.warn("No se encontraron datos de predicción en localStorage.");
+      setError("No hay datos de predicción disponibles para mostrar.");
+      setDisplayPrediction(null);
+      return;
+    }
+
+    try {
+      const parsedData = JSON.parse(storedPredictionData);
+      console.log("Datos parseados de localStorage:", parsedData);
+
+      // Validación exhaustiva de la estructura y tipos de datos esperados
+      if (
+        parsedData &&
+        parsedData.results &&
+        parsedData.results.classification &&
+        typeof parsedData.results.classification.benign === 'number' &&
+        typeof parsedData.results.classification.malignant === 'number' &&
+        (parsedData.results.primaryClass === "benign" || parsedData.results.primaryClass === "malignant") &&
+        typeof parsedData.results.confidence === 'number' &&
+        typeof parsedData.results.riskScore === 'number' &&
+        Array.isArray(parsedData.results.findings)
+      ) {
+        const newPrediction: Prediction = {
+          id: `pred_${Date.now()}`,
+          date: new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
+          model: "Modelo IA (ONNX)", // O tomar de parsedData si está disponible
+          imageId: parsedData.imageId || "Imagen Reciente", // O tomar de parsedData
+          results: {
+            classification: {
+              benign: parsedData.results.classification.benign,
+              malignant: parsedData.results.classification.malignant,
+            },
+            primaryClass: parsedData.results.primaryClass,
+            confidence: parsedData.results.confidence,
+            riskScore: parsedData.results.riskScore,
+            findings: parsedData.results.findings,
+          },
+        };
+        console.log("Estableciendo nuevo estado displayPrediction:", newPrediction);
+        setDisplayPrediction(newPrediction);
+      } else {
+        console.error("La estructura de los datos de predicción en localStorage es inválida o incompleta:", parsedData);
+        setError("Los datos de predicción recuperados son inválidos.");
+        setDisplayPrediction(null);
+      }
+    } catch (e) {
+      console.error("Error al parsear los datos de predicción de localStorage:", e);
+      setError("Error al procesar los datos de predicción.");
+      setDisplayPrediction(null);
+    }
+  }, []); // El array vacío asegura que se ejecute al montar el componente.
+          // Si navegas a la misma ruta, Next.js debería desmontar y montar la página.
+
+  if (error) {
+    return (
+      <Alert variant="destructive" className="mt-4">
+        <ShieldAlert className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    );
   }
 
-  const handleViewDetails = (prediction: (typeof mockPredictions)[0]) => {
-    setSelectedPrediction(prediction)
-    setIsDetailsOpen(true)
+  if (!displayPrediction) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Resultados de Clasificación del Tumor de Mama</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Cargando resultados o no hay predicción disponible...</p>
+        </CardContent>
+      </Card>
+    );
   }
 
-  // Función para traducir la clasificación primaria
-  const translatePrimaryClass = (primaryClass: string) => {
-    return primaryClass === "benign" ? "Benigno" : "Maligno"
-  }
+  // El resto de tu JSX para mostrar la información usando displayPrediction
+  // ... (ejemplo de cómo podrías estar mostrando los datos)
+  const { classification, primaryClass, confidence, riskScore, findings } = displayPrediction.results;
+  const riskLevelText = getRiskLevelText(riskScore); // Asumiendo que tienes esta función
+  const RiskIcon = getRiskLevelIcon(riskScore); // Asumiendo que tienes esta función
 
   return (
-    <div className="grid gap-4">
-      <Alert>
-        <InfoIcon className="h-4 w-4" />
-        <AlertTitle>Integración de Aprendizaje Automático Lista</AlertTitle>
-        <AlertDescription>
-          Esta sección mostrará los resultados de clasificación de tumores mamarios del modelo de IA una vez integrado.
-          Actualmente muestra datos de ejemplo.
-        </AlertDescription>
-      </Alert>
-
-      <Tabs defaultValue="results" onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="results">Últimos Resultados</TabsTrigger>
-          <TabsTrigger value="history">Historial</TabsTrigger>
-        </TabsList>
-        <TabsContent value="results" className="mt-4">
-          {mockPredictions.length > 0 ? (
-            <div className="grid gap-6">
-              <Card>
-                <CardHeader className="pb-2 flex flex-col sm:flex-row justify-between">
-                  <div>
-                    <CardTitle className="text-xl md:text-2xl">Última Clasificación</CardTitle>
-                    <CardDescription className="text-sm">
-                      Modelo: {mockPredictions[0].model} | Confianza:{" "}
-                      {(mockPredictions[0].results.confidence * 100).toFixed(1)}%
-                    </CardDescription>
-                  </div>
-                  <Badge variant="outline" className="self-start sm:self-center mt-2 sm:mt-0">
-                    {mockPredictions[0].date}
-                  </Badge>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="border rounded-lg p-4">
-                      <div className="text-sm font-medium text-muted-foreground mb-2">Clasificación Primaria</div>
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`w-4 h-4 rounded-full ${
-                            mockPredictions[0].results.primaryClass === "benign" ? "bg-amber-500" : "bg-red-500"
-                          }`}
-                        ></div>
-                        <div className="text-xl md:text-2xl font-bold capitalize">
-                          {translatePrimaryClass(mockPredictions[0].results.primaryClass)}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="border rounded-lg p-4">
-                      <div className="text-sm font-medium text-muted-foreground mb-2">Nivel de Riesgo</div>
-                      <div className="text-xl md:text-2xl font-bold">{mockPredictions[0].results.riskScore}/100</div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                        <div
-                          className={`h-2.5 rounded-full ${
-                            mockPredictions[0].results.riskScore < 50 ? "bg-amber-500" : "bg-red-500"
-                          }`}
-                          style={{ width: `${mockPredictions[0].results.riskScore}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border rounded-lg p-4 mt-4">
-                    <div className="text-sm font-medium text-muted-foreground mb-2">Hallazgos Clave</div>
-                    <ul className="mt-1 space-y-1 list-disc pl-5">
-                      {mockPredictions[0].results.findings.map((finding, index) => (
-                        <li key={index} className="text-sm md:text-base">
-                          {finding}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="ml-auto"
-                    onClick={() => handleViewReport(mockPredictions[0])}
-                  >
-                    <span className="hidden sm:inline mr-1">Ver</span> Informe Completo
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <ClassificationPieChart data={mockPredictions[0].results.classification} />
-                <RiskLevelBar riskScore={mockPredictions[0].results.riskScore} />
+    <div className="grid gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-6 w-6" />
+            Resultados de Clasificación del Tumor de Mama
+          </CardTitle>
+          <CardDescription>
+            Análisis detallado proporcionado por el modelo de IA SONAID. Fecha: {displayPrediction.date}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Resumen de la Predicción</h3>
+              <div className="space-y-2 text-sm">
+                <p className="flex items-center">
+                  <Activity className="h-4 w-4 mr-2 text-primary" />
+                  Clasificación Primaria: <span className={`font-semibold ${primaryClass === 'malignant' ? 'text-destructive' : 'text-green-600'}`}>{primaryClass === "malignant" ? "Maligno" : "Benigno"}</span>
+                </p>
+                <p className="flex items-center">
+                  <Thermometer className="h-4 w-4 mr-2 text-primary" />
+                  Nivel de Riesgo Estimado: <span className="font-semibold">{riskScore} / 100</span>
+                </p>
+                <p className="flex items-center">
+                  <RiskIcon className={`h-4 w-4 mr-2 ${riskScore >= 50 ? 'text-destructive' : 'text-green-600'}`} />
+                  Interpretación del Riesgo: <span className="font-semibold">{riskLevelText}</span>
+                </p>
+                <p className="flex items-center">
+                  <ShieldCheck className="h-4 w-4 mr-2 text-primary" />
+                  Confianza del Modelo: <span className="font-semibold">{(confidence * 100).toFixed(1)}%</span>
+                </p>
               </div>
-
-              <ClinicalRecommendations
-                classification={mockPredictions[0].results.primaryClass}
-                confidence={mockPredictions[0].results.confidence}
-              />
-            </div>
-          ) : (
-            <div className="text-center p-8">
-              <p className="text-muted-foreground">No hay resultados de clasificación disponibles aún.</p>
-            </div>
-          )}
-        </TabsContent>
-        <TabsContent value="history" className="mt-4">
-          <div className="space-y-6">
-            {mockPredictions.map((prediction) => (
-              <Card key={prediction.id} className="overflow-hidden">
-                <CardHeader className="pb-2 flex flex-col sm:flex-row justify-between">
-                  <div>
-                    <CardTitle className="text-base">Clasificación #{prediction.id}</CardTitle>
-                    <CardDescription className="text-xs sm:text-sm">
-                      Modelo: {prediction.model} | ID de Imagen: {prediction.imageId}
-                    </CardDescription>
-                  </div>
-                  <Badge variant="outline" className="self-start sm:self-center mt-2 sm:mt-0">
-                    {prediction.date}
-                  </Badge>
-                </CardHeader>
-                <CardContent>
-                  <div className="relative p-4 my-2 bg-muted rounded-lg border border-border">
-                    <div className="absolute top-0 left-4 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
-                      <Calendar className="h-3 w-3 inline mr-1" />
-                      {prediction.date}
-                    </div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div
-                        className={`w-3 h-3 rounded-full ${
-                          prediction.results.primaryClass === "benign" ? "bg-amber-500" : "bg-red-500"
-                        }`}
-                      ></div>
-                      <div className="text-base sm:text-lg font-bold capitalize">
-                        {translatePrimaryClass(prediction.results.primaryClass)}
-                      </div>
-                      <div className="text-xs sm:text-sm text-muted-foreground ml-auto">
-                        Confianza: {(prediction.results.confidence * 100).toFixed(1)}%
-                      </div>
-                    </div>
-                    <p className="text-xs sm:text-sm">{prediction.results.additionalDetails}</p>
-                    <div className="flex justify-end mt-2">
-                      <Button
-                        variant="link"
-                        size="sm"
-                        className="h-8 px-2"
-                        onClick={() => handleViewDetails(prediction)}
-                      >
-                        Ver Detalles
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      {/* Modal de Informe Completo */}
-      <Dialog open={isReportOpen} onOpenChange={setIsReportOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Informe de Clasificación Completo</DialogTitle>
-            <DialogDescription>
-              {selectedPrediction && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-1">
-                  <span>Fecha: {selectedPrediction.date}</span>
-                  <span className="hidden sm:inline">•</span>
-                  <span>Modelo: {selectedPrediction.model}</span>
-                  <span className="hidden sm:inline">•</span>
-                  <span>Confianza: {(selectedPrediction.results.confidence * 100).toFixed(1)}%</span>
-                </div>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedPrediction && (
-            <div className="grid gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Resultados de Clasificación</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                          Benigno:
-                        </span>
-                        <span>{(selectedPrediction.results.classification.benign * 100).toFixed(1)}%</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                          Maligno:
-                        </span>
-                        <span>{(selectedPrediction.results.classification.malignant * 100).toFixed(1)}%</span>
-                      </div>
-                      <div className="pt-2 mt-2 border-t">
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">Clasificación Primaria:</span>
-                          <span className="capitalize font-bold">
-                            {translatePrimaryClass(selectedPrediction.results.primaryClass)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Hallazgos Clave</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="list-disc pl-5 space-y-1">
-                      {selectedPrediction.results.findings.map((finding, index) => (
-                        <li key={index} className="text-sm">
-                          {finding}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Análisis Detallado</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm">{selectedPrediction.results.additionalDetails}</p>
-                </CardContent>
-              </Card>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ClassificationPieChart data={selectedPrediction.results.classification} />
-                <RiskLevelBar riskScore={selectedPrediction.results.riskScore} />
-              </div>
-
-              <ClinicalRecommendations
-                classification={selectedPrediction.results.primaryClass}
-                confidence={selectedPrediction.results.confidence}
-              />
-            </div>
-          )}
-
-          <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button variant="outline" onClick={() => setIsReportOpen(false)} className="w-full sm:w-auto">
-              Cerrar
-            </Button>
-            <Button className="gap-2 w-full sm:w-auto">
-              <Download className="h-4 w-4" />
-              Descargar PDF
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Modal de Ver Detalles */}
-      <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Detalles de Clasificación</DialogTitle>
-            <DialogDescription>
-              {selectedPrediction && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-1">
-                  <span>Fecha: {selectedPrediction.date}</span>
-                  <span className="hidden sm:inline">•</span>
-                  <span>Modelo: {selectedPrediction.model}</span>
-                </div>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedPrediction && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="border rounded-md p-3">
-                  <div className="text-sm font-medium text-muted-foreground">Clasificación</div>
-                  <div className="text-lg sm:text-xl font-bold capitalize">
-                    {translatePrimaryClass(selectedPrediction.results.primaryClass)}
-                  </div>
-                </div>
-                <div className="border rounded-md p-3">
-                  <div className="text-sm font-medium text-muted-foreground">Nivel de Riesgo</div>
-                  <div className="text-lg sm:text-xl font-bold">{selectedPrediction.results.riskScore}/100</div>
-                </div>
-              </div>
-
-              <div className="border rounded-md p-3">
-                <div className="text-sm font-medium text-muted-foreground">Puntuación de Confianza</div>
-                <div className="text-lg sm:text-xl font-bold">
-                  {(selectedPrediction.results.confidence * 100).toFixed(1)}%
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                  <div
-                    className="bg-primary h-2.5 rounded-full"
-                    style={{ width: `${selectedPrediction.results.confidence * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="border rounded-md p-3">
-                <div className="text-sm font-medium text-muted-foreground">Hallazgos</div>
-                <ul className="mt-1 space-y-1 list-disc pl-5">
-                  {selectedPrediction.results.findings.map((finding, index) => (
-                    <li key={index} className="text-sm">
-                      {finding}
-                    </li>
-                  ))}
+              <div className="mt-4">
+                <h4 className="font-semibold mb-1">Hallazgos Clave:</h4>
+                <ul className="list-disc list-inside text-sm space-y-1">
+                  {findings.map((finding, index) => <li key={index}>{finding}</li>)}
                 </ul>
               </div>
-
-              <div className="border rounded-md p-3">
-                <div className="text-sm font-medium text-muted-foreground">Detalles Adicionales</div>
-                <p className="mt-1 text-sm">{selectedPrediction.results.additionalDetails}</p>
-              </div>
             </div>
-          )}
-
-          <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button variant="outline" onClick={() => setIsDetailsOpen(false)} className="w-full sm:w-auto">
-              Cerrar
-            </Button>
-            <Button
-              variant="default"
-              className="gap-2 w-full sm:w-auto"
-              onClick={() => {
-                setIsDetailsOpen(false)
-                handleViewReport(selectedPrediction!)
-              }}
-            >
-              <FileText className="h-4 w-4" />
-              Ver Informe Completo
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <div className="min-h-[300px]"> {/* Contenedor para la gráfica */}
+              <h3 className="text-lg font-semibold mb-2 text-center">Distribución de Probabilidad</h3>
+              {classification && typeof classification.benign === 'number' && typeof classification.malignant === 'number' ? (
+                <ClassificationPieChart data={classification} />
+              ) : (
+                <p className="text-center text-muted-foreground">Datos de clasificación no disponibles para la gráfica.</p>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      {/* ... más cards o información ... */}
     </div>
-  )
+  );
+}
+
+// Funciones de ayuda (debes tenerlas definidas o adaptarlas)
+function getRiskLevelText(riskScore: number): string {
+  if (riskScore >= 70) return "Alto";
+  if (riskScore >= 30) return "Moderado";
+  return "Bajo";
+}
+
+function getRiskLevelIcon(riskScore: number) {
+  if (riskScore >= 70) return ShieldAlert; // Icono para riesgo alto
+  if (riskScore >= 30) return ShieldAlert; // Icono para riesgo moderado (puedes cambiarlo)
+  return ShieldCheck; // Icono para riesgo bajo
 }

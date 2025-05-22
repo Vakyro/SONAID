@@ -155,7 +155,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
           )}
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:ml-auto">
-            <Link href={`/patients/${params.id}/edit`}>
+            <Link href={`/patients/${unwrappedParams.id}/edit`}> {/* Corrected: Use unwrappedParams.id */}
               <Button variant="outline" size="sm" className="h-8 gap-1 w-full sm:w-auto">
                 <Edit className="h-4 w-4" />
                 <span>Editar</span>

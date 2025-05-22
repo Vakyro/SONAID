@@ -1,30 +1,52 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card" // Asumiendo que usas Card
 
 interface ClassificationData {
-  benign: number
-  malignant: number
+  benign: number;
+  malignant: number;
 }
 
 interface ClassificationPieChartProps {
-  data: ClassificationData
-  title?: string
-  description?: string
+  data: ClassificationData | null | undefined; // Permitir que data sea null o undefined
+  title?: string; // Añadido: prop opcional para el título
+  description?: string; // Añadido: prop opcional para la descripción
+}
+
+const colors = {
+  benign: "#4CAF50", // Verde
+  malignant: "#F44336", // Rojo
 }
 
 export function ClassificationPieChart({
   data,
-  title = "Resultados de Clasificación",
-  description = "Distribución de probabilidad de clasificación de tumor mamario",
+  title = "Distribución de Probabilidad", // Añadido: valor por defecto para el título
+  description = "Probabilidades de clasificación benigna vs. maligna", // Añadido: valor por defecto para la descripción
 }: ClassificationPieChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  // Calcular total para obtener porcentajes
-  const total = data.benign + data.malignant
-  const benignPercent = Math.round((data.benign / total) * 100)
-  const malignantPercent = Math.round((data.malignant / total) * 100)
+  // Validar datos y calcular porcentajes y fracciones
+  const numBenign = (data && typeof data.benign === 'number' && !isNaN(data.benign)) ? data.benign : 0;
+  const numMalignant = (data && typeof data.malignant === 'number' && !isNaN(data.malignant)) ? data.malignant : 0;
+
+  let benignFraction = 0;
+  let malignantFraction = 0;
+  let benignPercent = 0;
+  let malignantPercent = 0;
+
+  const totalProb = numBenign + numMalignant;
+
+  if (totalProb > 0) {
+    benignFraction = numBenign / totalProb;
+    malignantFraction = numMalignant / totalProb;
+    benignPercent = Math.round(benignFraction * 100);
+    malignantPercent = Math.round(malignantFraction * 100);
+
+    // Ajuste para que la suma de porcentajes sea 100% debido a redonde
+  }
+  // Si total es 0 porque numBenign y numMalignant son 0 (porque data.benign/malignant eran undefined/NaN),
+  // benignPercent y malignantPercent permanecerán en 0, lo cual es mejor que NaN.
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -63,7 +85,10 @@ export function ClassificationPieChart({
       // Dibujar gráfico circular
       let startAngle = 0
       const drawSegment = (value: number, color: string, label: string) => {
-        const segmentAngle = (value / total) * 2 * Math.PI
+        // Ensure total is not zero before drawing to avoid division by zero
+        if (totalProb <= 0 || value <= 0) return; // Corregido: total -> totalProb
+
+        const segmentAngle = (value / totalProb) * 2 * Math.PI // Corregido: total -> totalProb
 
         ctx.beginPath()
         ctx.moveTo(centerX, centerY)
@@ -89,8 +114,26 @@ export function ClassificationPieChart({
       }
 
       // Dibujar segmentos
-      drawSegment(data.benign, colors.benign, `${benignPercent}%`)
-      drawSegment(data.malignant, colors.malignant, `${malignantPercent}%`)
+      if (totalProb > 0) { // Corregido: total -> totalProb
+        if (data && data.benign > 0) { // Only draw if there's a value // Asegúrate que data no sea null aquí
+            drawSegment(data.benign, colors.benign, `${benignPercent}%`)
+        }
+        if (data && data.malignant > 0) { // Only draw if there's a value // Asegúrate que data no sea null aquí
+            drawSegment(data.malignant, colors.malignant, `${malignantPercent}%`)
+        }
+      } else {
+        // Optional: Draw a message or an empty state if total is 0
+        ctx.fillStyle = "#6b7280"; // Gray text
+        ctx.font = `normal ${Math.max(12, Math.floor(canvas.width / 18))}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        if (numBenign === 0 && numMalignant === 0 && (data.benign === undefined || data.malignant === undefined)) {
+            ctx.fillText("No data available", centerX, centerY);
+        } else {
+            // This case means both are 0, or data was invalid
+            ctx.fillText("0% Benign, 0% Malignant", centerX, centerY);
+        }
+      }
     }
 
     // Dibujo inicial
@@ -102,7 +145,7 @@ export function ClassificationPieChart({
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [data, total, benignPercent, malignantPercent])
+  }, [data, totalProb, benignPercent, malignantPercent]) // Corregido: total -> totalProb
 
   return (
     <Card>

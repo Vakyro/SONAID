@@ -11,9 +11,10 @@ import Image from "next/image"
 
 interface ImageValidatorProps {
   onValidImage: (file: File) => void
+  onAnalyze?: (file: File) => void  // Modified: onAnalyze will now receive the file
 }
 
-export function ImageValidator({ onValidImage }: ImageValidatorProps) {
+export function ImageValidator({ onValidImage, onAnalyze }: ImageValidatorProps) {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [isValidating, setIsValidating] = useState(false)
@@ -68,38 +69,31 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
   }
 
   const validateImage = (imageFile: File) => {
-    setIsValidating(true)
-    setValidationResult(null)
+    setIsValidating(true); // Puedes mantener esto brevemente para la UI si quieres, o quitarlo.
+    // Para una validación "falsa" instantánea, podrías incluso quitar setIsValidating(true)
+    // y el estado de carga en la UI para la validación.
 
-    // Verificar tipo de archivo
-    const validTypes = ["image/jpeg", "image/png", "image/dicom", "application/dicom"]
+    // 1. Verificar tipo de archivo (esto es una validación básica que podemos mantener)
+    const validTypes = ["image/jpeg", "image/png", "image/dicom", "application/dicom"];
     if (!validTypes.includes(imageFile.type)) {
-      setIsValidating(false)
+      setIsValidating(false);
       setValidationResult({
         isValid: false,
         message: "Tipo de archivo inválido. Por favor, suba una imagen JPEG, PNG o DICOM.",
-      })
-      return
+      });
+      return;
     }
 
-    // Simular validación basada en ML (en una aplicación real, esto llamaría a una API)
-    setTimeout(() => {
-      // Validación simulada - en una aplicación real, esto sería una verificación de modelo ML real
-      const mockValidation = Math.random() > 0.2 // 80% de probabilidad de éxito para fines de demostración
+    // 2. Simular validación exitosa inmediatamente (sin setTimeout ni mockValidation)
+    setIsValidating(false); // Indicar que la "validación" terminó
+    setValidationResult({
+      isValid: true,
+      message: "Imagen 'validada' con éxito (simulado). Lista para análisis.",
+    });
 
-      setIsValidating(false)
-      setValidationResult({
-        isValid: mockValidation,
-        message: mockValidation
-          ? "Imagen validada con éxito. Esta parece ser una imagen válida de ultrasonido/mamografía de mama."
-          : "Esta imagen no parece ser un ultrasonido o mamografía de mama. Por favor, suba una imagen válida.",
-      })
-
-      if (mockValidation && file) {
-        onValidImage(file)
-      }
-    }, 2000)
-  }
+    // 3. Llamar a onValidImage para pasar el archivo al componente padre
+    onValidImage(imageFile);
+  };
 
   return (
     <Card>
@@ -183,7 +177,12 @@ export function ImageValidator({ onValidImage }: ImageValidatorProps) {
             Reiniciar
           </Button>
         )}
-        {file && validationResult?.isValid && <Button>Proceder al Análisis</Button>}
+        {file && validationResult?.isValid && onAnalyze && ( // Ensure onAnalyze and file exist
+          <Button onClick={() => file && onAnalyze(file)}> 
+            {/* Modified: Pass the 'file' state to onAnalyze */}
+            Proceder al Análisis
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )
